@@ -10,6 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="home.css" />
 </head>
+
 <body>
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -22,22 +23,21 @@
         </h4>
         
         <li>
-        <button id ="dashboard-link" >
+        <button id ="dashboard_button" >
           <span class="material-symbols-outlined"> dashboard </span>Dashboard</a>
         </button>
         </li>
       <li>
-          <button><span class="material-symbols-outlined"> overview </span>Overview</a>
+          <button id ="overview_button"><span class="material-symbols-outlined"> overview </span>Overview</a>
           </button>
       </li>
       
       <li>
-        <button><span class="material-symbols-outlined"> folder </span>Projects</a>
+        <button id ="project_button"><span class="material-symbols-outlined"> folder </span>Projects</a>
         </button>
         </li>
       <li>
-        <button><span class="material-symbols-outlined">
-            notifications_active </span>Notifications</a>
+        <button id ="notification_button" ><span class="material-symbols-outlined"> notifications_active </span>Notifications</a>
       </li>
       <h4>
         <span>Entertainment</span>
@@ -45,27 +45,28 @@
       </h4>
       
       <li>
-        <button><span class="material-symbols-outlined"> videocam </span>Films</a>
+        <button id ="film_button"><span class="material-symbols-outlined"> videocam </span>Films</a>
         </button>
         </li>
       <li>
-        <button><span class="material-symbols-outlined"> music_note </span>Music</a>
+        <button id ="music_button"><span class="material-symbols-outlined"> music_note </span>Music</a>
         </button>
         </li>
       <h4>
+
         <span>Account</span>
         
       </h4>
       <li>
-        <button><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+        <button id="account_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
         </button>
         </li>
       <li>
-        <button><span class="material-symbols-outlined"> settings </span>Settings</a>
+        <button id ="setting_button"><span class="material-symbols-outlined"> settings </span>Settings</a>
       </li>
       <li>
-        <a href ="login.html"><span class="material-symbols-outlined"> logout </span>Logout</a>
-        
+        <button onclick="log_out()"><span class="material-symbols-outlined"> logout </span>Logout</a>
+        </button>
         </li>
     </ul>
    
@@ -75,9 +76,9 @@
     </div>
   </aside>
 
-    <div class="main-content">
+    <div class="main-content" id ="main_type">
         <!-- dashboard -->
-        <div id = "dashboard_main" style="display: none;">
+        <div id = "dashboard_main" style="display: flex;">
             <h1>Dashboard</h1>
             <p> Welcome to your dashboard. Here you can view your recent activity and notifications. </p>
         </div>
@@ -88,17 +89,17 @@
 
         </div>
         <!-- projects -->
-        <div id = "projects_main" style="display: none;">
+        <div id = "project_main" style="display: none;">
             <h1>Projects</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
         <!-- notifications -->
-        <div id = "notifications_main" style="display: none;">
+        <div id = "notification_main" style="display: none;">
             <h1>Notifications</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
         <!-- films -->
-        <div id = "films_main" style="display: none;">
+        <div id = "film_main" style="display: none;">
             <h1>Films</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
@@ -113,9 +114,10 @@
             <p> Here you can view your recent activity and notifications. </p>
         </div>
         <!-- settings -->
-        <div id = "settings_main" style="display: none;">
+        <div id = "setting_main" style="display: none;">
             <h1>Settings</h1>
             <p> Here you can view your recent activity and notifications. </p>
+            <input type="file" id="fileLocation" webkitdirectory directory multiple>
         </div>
 
 
@@ -125,4 +127,5 @@
 
 
 </body>
+<script src="home.js"></script>
 </html>
