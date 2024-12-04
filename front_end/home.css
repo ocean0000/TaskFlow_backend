@@ -1,0 +1,129 @@
+/* Importing Google font - Poppins */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background: #F0F4FF;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 85px;
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: column;
+  background: #161a2d;
+  padding: 25px 20px;
+  transition: all 0.4s ease;
+}
+
+.sidebar:hover {
+  width: 250px;
+}
+
+.sidebar .sidebar-header {
+  display: flex;
+  align-items: center;
+}
+
+
+
+.sidebar .sidebar-header h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 23px;
+}
+
+.sidebar-links h4 {
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+  margin: 10px 0;
+  position: relative;
+}
+
+.sidebar-links h4 span {
+  opacity: 0;
+}
+
+.sidebar:hover .sidebar-links h4 span {
+  opacity: 1;
+}
+
+.sidebar-links button:hover {
+   background-color: #f0f0f0;
+ }
+.sidebar-links button {
+   background: none;
+   border: none;
+   color: inherit;
+   font: inherit;
+   cursor: pointer;
+   display: flex;
+   align-items: center;
+   padding: 10px;
+   width: 100%;
+   text-align: left;
+   text-decoration: none;
+ }
+
+.sidebar-links h4::before {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(1);
+  transform: translateY(-50%);
+  background: #202384;
+  transform-origin: right;
+  transition-delay: 0.2s;
+}
+
+/* xóa thanh scroll và chỉnh độ rộng  */
+.sidebar-links {
+  list-style: none;
+  margin-top: 20px;
+  height: 90%;
+  overflow-y: auto;
+  scrollbar-width: none;
+  color: #add0f8;
+}
+
+/* thẻ button trong li  ở trong side bar */
+.sidebar-links li button {
+  display: flex;
+  align-items: center;
+  gap: 0 20px;
+  color: #add0f8;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 15px 10px;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+/* design for link */
+.sidebar-links li a {
+   display: flex;
+   align-items: center;
+   gap: 0 20px;
+   color: #add0f8;
+   font-weight: 500;
+   white-space: nowrap;
+   padding: 15px 10px;
+   text-decoration: none;
+   transition: 0.2s ease;
+}
+
