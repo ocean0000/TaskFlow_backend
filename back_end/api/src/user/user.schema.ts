@@ -8,11 +8,15 @@ export class User {
   @Prop()
   email: string;
 
-   @Prop()
-   username: string;
+  @Prop()
+  username: string;
 
   @Prop()
   password: string;
+
+  @Prop()
+  profile_image: string;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

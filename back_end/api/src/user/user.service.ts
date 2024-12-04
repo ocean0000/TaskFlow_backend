@@ -13,6 +13,11 @@ export class UserService {
    //create a new collection
 
 
+   async get_user(user: User) {
+      const users = await this.userscollection.findOne({ username: user.username });
+      return users;
+   }
+
    async register(user: User) {
       
       const existingUser = await this.userscollection.findOne({ username: user.username });
@@ -47,14 +52,28 @@ export class UserService {
       const username = data.name; 
       const email = data.email;
       const name = username;
+      const profile_image = "none";
       const existingUser = await this.userscollection.findOne({ username: username });
       if (!existingUser) {
-         const newUser = new this.userscollection({ name, email, username});
+         const newUser = new this.userscollection({ name, email, username, profile_image });
          await newUser.save();
       }
-      return true;
+      
+      return {username, email};
 
    
    }
-       
+
+   async update(username: string, name: string, password: string, profile_image: string) {
+      const existingUser = await this.userscollection.findOne({ username });
+      if (!existingUser) {
+         return ;
+      }
+      const  newuser=   await this.userscollection.findOneAndUpdate({ username }, { name, password, profile_image });
+      return newuser;
+
+
+   }
+
+
 }

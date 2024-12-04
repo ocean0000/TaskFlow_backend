@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const username = document.getElementById('loginUsername').value;
         const password = document.getElementById('loginPassword').value;
+        
 
         fetch('http://localhost:3000/user/login', {
                 method: 'POST',
@@ -59,6 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'Login successfully') {
+                    sessionStorage.setItem('username', result.username);
+                    sessionStorage.setItem('email', result.email);
                     window.location.assign('home.html');
                 } else {
                     alert(result.message || result);
@@ -77,6 +80,7 @@ function onSignIn(response)
 {
       
       const data = response;
+     
       
       fetch('http://localhost:3000/user/login_google', {
                 method: 'POST',
@@ -87,11 +91,10 @@ function onSignIn(response)
             })
             .then(response => response.json())
             .then(result => {
-                if (result === true) {
-                    window.location.assign('home.html');
-                } else {
-                    alert(result.message || result);
-                }
+                sessionStorage.setItem('username', result.username);
+                sessionStorage.setItem('email', result.email);
+                
+                window.location.assign('home.html');
             })
             .catch(error => {
                 console.error('Error:', error);

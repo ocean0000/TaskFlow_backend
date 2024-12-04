@@ -58,7 +58,7 @@
         
       </h4>
       <li>
-        <button id="account_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+        <button id="profile_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
         </button>
         </li>
       <li>
@@ -109,15 +109,44 @@
             <p> Here you can view your recent activity and notifications. </p>
         </div>
         <!-- profile -->
-        <div id = "profile_main" style="display: none;">
-            <h1>Profile</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+        <div id = "profile_main" style="display: none">
+          
+          <div class="profile-container">
+            <form id="profileForm">
+              
+              <div class="profile-image-container">
+                <img id="profileImage" src="assests/bg.jpg" alt="Profile Image">
+                <input type="file" id="profileInput" accept="image/*">
+                <button id="uploadButton"><span class="material-symbols-outlined"> photo_camera </span></button> <!-- Nút nhấn nhỏ -->
+              </div>
+              <h1 id ="name"></h1>
+          
+
+            <label for="name">New Name:</label>
+          
+
+            <input type="text" id="new_name" name="new_name" minlength="6">
+
+            <label for="password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" minlength="6" >
+
+            <div>
+
+              <button type="submit" id ="submit_button" >Change profile</button>
+            </div>
+        </form>
+      </div>
+      
+         
+        
+        
+        
         </div>
         <!-- settings -->
         <div id = "setting_main" style="display: none;">
             <h1>Settings</h1>
             <p> Here you can view your recent activity and notifications. </p>
-            <input type="file" id="fileLocation" webkitdirectory directory multiple>
+            
         </div>
 
 
