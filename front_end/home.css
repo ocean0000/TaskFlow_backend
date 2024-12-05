@@ -10,7 +10,22 @@
 
 body {
   min-height: 100vh;
-  background: #F0F4FF;
+}
+
+
+body.light_mode {
+  background-color: white;
+  color: black;
+}
+body.dark_mode {
+  background-color: black;
+  color: white;
+}
+
+
+body.dark_mode #profile_main label {
+  color: white;
+
 }
 
 .sidebar {
@@ -127,75 +142,14 @@ body {
    transition: 0.2s ease;
 }
 
-/* profile design */
-#profile_main {
+/* design for main_contet  */
+.main-content {
+  margin-left: 85px;
+  padding: 20px;
+  transition: all 0.4s ease;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+  flex-direction: column;
 }
-
-
-.profile-image-container {
-  position: relative;
-  display: inline-block;
-}
-
-#profileImage {
-  width: 150px; /* Kích thước hình tròn */
-  height: 150px; /* Kích thước hình tròn */
-  border-radius: 50%; /* Tạo hình tròn */
-  object-fit: cover; /* Cắt hình ảnh cho vừa khung */
-  border: 2px solid #007BFF; /* Đường viền */
-}
-
-input[type="file"] {
-  display: none; /* Ẩn input file */
-}
-
-
-label {
-  display: block;
-  margin: 10px 0 5px;
-  color: #333;
-  
-}
-
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-#submit_button {
-  background-color: #007BFF;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin: 5px;
-}
-
-#submit_button:hover {
-  background-color: #0056b3;
-}
-
-#uploadButton {
-  position: absolute;
-  bottom: 10px; /* Đặt nút ở dưới cùng */
-  right: 10px; /* Đặt nút ở bên phải */
-  border: none; /* Không có đường viền */
-  border-radius: 50%; /* Tạo hình tròn cho nút */
-  width: 20px; /* Kích thước nút */
-  height: 20px; /* Kích thước nút */
-  font-size: 20px; /* Kích thước chữ */
-  cursor: pointer; /* Con trỏ chuột khi hover */
-}
-
-
 
 
 

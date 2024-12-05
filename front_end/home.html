@@ -9,9 +9,10 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="home.css" />
+  <link rel ="stylesheet" href="profile.css"/>
 </head>
 
-<body>
+<body id ="body">
   <aside class="sidebar">
     <div class="sidebar-header">
       
@@ -108,10 +109,13 @@
             <h1>Music</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
+
+
+
         <!-- profile -->
         <div id = "profile_main" style="display: none">
           
-          <div class="profile-container">
+        <div class="profile-container">
             <form id="profileForm">
               
               <div class="profile-image-container">
@@ -129,18 +133,69 @@
 
             <label for="password">New Password:</label>
             <input type="password" id="new_password" name="new_password" minlength="6" >
-
+              
+            <!-- submit button  -->
             <div>
 
               <button type="submit" id ="submit_button" >Change profile</button>
             </div>
-        </form>
-      </div>
-      
-         
+
+            </form>
+        
+            <!-- back ground change -->
+          <div>
+            <label for="backgroundSelect">Background:</label>
+            <select id="backgroundSelect">
+                <option value="light_mode">Light</option>
+                <option value="dark_mode">Dark</option>
+            </select>
+          </div>
+        
+          <!-- code background change -->
+          <script>
+            // Function to set the background mode
+            function setBackgroundMode(mode) {
+              
+              var body = document.getElementById('body');
+              if (body) {
+                body.className = mode;
+                document.getElementById('backgroundSelect').value = mode;
+              }
+            }
+            
+            // Load the saved background mode from local storage
+            document.addEventListener('DOMContentLoaded', function() {
+              var savedMode = localStorage.getItem('backgroundMode') || 'light_mode';
+              setBackgroundMode(savedMode);
+            });
+            
+            // Save the selected background mode to local storage
+            document.getElementById('backgroundSelect').addEventListener('change', function() {
+              var selectedMode = this.value;
+              localStorage.setItem('backgroundMode', selectedMode);
+              setBackgroundMode(selectedMode);
+            });
+            </script>
+
+        </div>
+
+        <!-- description -->
+        <div class ="description_container">
+          <label for = "description">Description:</label>
+          <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter description here"></textarea>
+          
+
+
+        </div>
         
         
         
+
+
+
+
+
+
         </div>
         <!-- settings -->
         <div id = "setting_main" style="display: none;">

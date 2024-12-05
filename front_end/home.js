@@ -1,18 +1,18 @@
 let username = sessionStorage.getItem('username');
+const buttonIds = [
+    'dashboard',
+    'overview',
+    'project',
+    'profile',
+    'notification',
+    'music',
+    'setting',
+    'film',
+    
+];
 document.addEventListener('DOMContentLoaded', function() {
-    const buttonIds = [
-        'dashboard',
-        'overview',
-        'project',
-        'profile',
-        'notification',
-        'music',
-        'setting',
-        'film',
-        
-    ];
    
-   
+//    update profile
    
    fetch('http://localhost:3000/user/get_user', {
             method: 'POST',
@@ -25,6 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(result => {
                
                document.getElementById('name').innerText =  result.name;
+               console.log(result);
+               if(result.description)
+               {
+
+                   document.getElementById('description').value = result.description;
+             }
                if (result.profile_image) {
                   document.getElementById('profileImage').src = `data:image/png;base64,${result.profile_image}`;
               }
@@ -39,20 +45,25 @@ document.addEventListener('DOMContentLoaded', function() {
                alert("Error connection");
             });
 
-    buttonIds.forEach(id => {
-        const button = document.getElementById(id +'_button');
-        if (button) {
-            button.addEventListener('click', function() {
-                const main = document.getElementById(id+'_main');
-                console.log(main);
-                main.style.display = 'flex';
-                  buttonIds.filter(bid => bid !== id).forEach(bid => {
-                     document.getElementById(bid+'_main').style.display = 'none';
-                  });
-                
+    buttonIds.forEach(function(buttonId) {
+        const button = document.getElementById(buttonId + '_button'); ;
+        button.addEventListener('click', function() {
+          document.getElementById(buttonId+'_main').style.display = 'flex';
+            buttonIds.forEach(function(otherButtonId) {
+                if (otherButtonId !== buttonId) {
+                document.getElementById(otherButtonId + '_main').style.display = 'none';
+                }
             });
-        }
-    });
+
+         });
+
+        
+         
+        });
+         
+
+        
+
 
    
 
@@ -91,6 +102,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const name = document.getElementById('new_name').value;
     const password = document.getElementById('new_password').value;
     const profileImageInput = document.getElementById('profileInput');
+    const description = document.getElementById('description').value;
     const profileImage = profileImageInput.files[0];
 
     const formData = new FormData();
@@ -101,6 +113,10 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     if(password )
     {
         formData.append('password', password);
+    }
+    if(description)
+    {
+        formData.append('description', description);
     }
     formData.append('username', username);
 
@@ -135,3 +151,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
         alert('Error connection');
     });
 });
+
+
+
+

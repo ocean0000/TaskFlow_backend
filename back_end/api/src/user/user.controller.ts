@@ -1,5 +1,5 @@
 import { Body, Controller, UseInterceptors, UploadedFile } from '@nestjs/common';
-import { Express } from 'express';
+import e, { Express } from 'express';
 import { Multer } from 'multer';
 import { UserService } from './user.service';
 import { User } from './user.schema';
@@ -32,11 +32,13 @@ export class UserController {
     @Body('username') username: string,
     @Body('name') name: string,
     @Body('password') password: string,
+    @Body('description') description: string,
     @UploadedFile() file: Express.Multer.File,
   ) {
     const profile_image = file ? file.buffer.toString('base64') : null;
-   
-    return this.userService.update(username, name, password, profile_image);
+    const user = { username, name, password, description, profile_image, email: '' };
+     
+    return this.userService.update(user);
   }
 
   @Post('get_user')

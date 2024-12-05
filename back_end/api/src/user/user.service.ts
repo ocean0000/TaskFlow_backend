@@ -64,12 +64,15 @@ export class UserService {
    
    }
 
-   async update(username: string, name: string, password: string, profile_image: string) {
+   async update(user: User) {
+      const username = user.username;
+      
       const existingUser = await this.userscollection.findOne({ username });
       if (!existingUser) {
          return ;
       }
-      const  newuser=   await this.userscollection.findOneAndUpdate({ username }, { name, password, profile_image });
+      const  newuser=   await this.userscollection.findOneAndUpdate({ username }, user, { new: true });
+      
       return newuser;
 
 
