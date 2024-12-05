@@ -44,6 +44,7 @@ body.dark_mode #profile_main label {
 
 .sidebar:hover {
   width: 250px;
+  
 }
 
 .sidebar .sidebar-header {
@@ -144,12 +145,16 @@ body.dark_mode #profile_main label {
 
 /* design for main_contet  */
 .main-content {
-  margin-left: 85px;
+  margin-left: 10px; /* Margin mặc định, bằng width của sidebar khi chưa mở rộng */
   padding: 20px;
-  transition: all 0.4s ease;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.4s ease; /* Thêm transition để có hiệu ứng mượt */
 }
 
+/* Khi sidebar mở rộng */
+.sidebar:hover + .main-content {
+  margin-left: 250px; /* Dịch main-content sang khi sidebar mở rộng */
+}
 
 

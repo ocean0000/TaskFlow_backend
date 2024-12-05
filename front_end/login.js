@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(result => {
                 if (result.message === 'Login successfully') {
-                    sessionStorage.setItem('username', result.username);
-                    sessionStorage.setItem('email', result.email);
+                    localStorage.setItem('username', result.user.username);
+                    
                     window.location.assign('home.html');
                 } else {
                     alert(result.message || result);
@@ -91,8 +91,8 @@ function onSignIn(response)
             })
             .then(response => response.json())
             .then(result => {
-                sessionStorage.setItem('username', result.username);
-                sessionStorage.setItem('email', result.email);
+                localStorage.setItem('username', result.username);
+                localStorage.setItem('email', result.email);
                 
                 window.location.assign('home.html');
             })
