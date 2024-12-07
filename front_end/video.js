@@ -13,7 +13,7 @@ function addVideoToPlaylist(playlistIndex, video) {
     // Tạo phần tử video mới
     const videoItem = document.createElement('li');
     videoItem.innerHTML = `
-        <h3 contenteditable="true">${video.name}</h3>
+        <h3 contenteditable="true" data-playlist-index="${playlistIndex}" data-video-index="${playlists[playlistIndex].videos.length - 1}" >${video.name}</h3>
         <button class="remove-video-button" data-playlist-index="${playlistIndex}" data-video-index="${playlists[playlistIndex].videos.length - 1}">X</button>
         ${
             video.type === 'mp3'
@@ -32,6 +32,21 @@ function addVideoToPlaylist(playlistIndex, video) {
         playlists[playlistIndex].videos.splice(videoIndex, 1); // Xóa video khỏi mảng
         videoItem.remove(); // Xóa phần tử DOM
         update_database();
+    });
+
+    // edit tên video
+    const videoNameElement = videoItem.querySelector('h3');
+    videoNameElement.addEventListener('blur', function () {
+        const playlistIndex = parseInt(this.getAttribute('data-playlist-index'), 10);
+        const videoIndex = parseInt(this.getAttribute('data-video-index'), 10);
+
+        // Cập nhật tên video trong mảng
+        if (Number.isInteger(playlistIndex) && Number.isInteger(videoIndex)) {
+            playlists[playlistIndex].videos[videoIndex].name = this.textContent.trim();
+            update_database(); // Cập nhật database
+        } else {
+            console.error('Invalid playlistIndex or videoIndex');
+        }
     });
 
     // Thêm video vào danh sách hiển thị
@@ -59,6 +74,15 @@ function renderPlaylists() {
             </div>
             <ul class="playlist-videos" data-index="${index}"></ul>
         `;
+
+
+        // Sự kiện edit tên playlist
+        const playlistNameElement = playlistElement.querySelector('h2');
+        playlistNameElement.addEventListener('blur', function () {
+            const index = this.parentElement.parentElement.getAttribute('data-index');
+            playlists[index].name = this.textContent.trim();
+            update_database(); // Cập nhật database
+        });
 
         // Xử lý xóa playlist
         const removePlaylistButton = playlistElement.querySelector('.remove-playlist-button');
