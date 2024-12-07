@@ -152,4 +152,11 @@ addPlaylistButton.addEventListener('click', function () {
 });
 
 // Render danh sách playlist khi tải trang
-document.addEventListener('DOMContentLoaded', renderPlaylists);
+document.addEventListener('DOMContentLoaded', function()
+{
+
+    
+
+    renderPlaylists();
+}
+);
