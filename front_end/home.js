@@ -5,7 +5,7 @@ const buttonIds = [
     'project',
     'profile',
     'notification',
-    'music',
+    'video',
     'setting',
     'film',
     
