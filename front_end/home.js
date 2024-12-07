@@ -10,6 +10,10 @@ const buttonIds = [
     'film',
     
 ];
+let music_start= Date.now();
+let music_spent = 0;
+let total_start = Date.now();
+
 document.addEventListener('DOMContentLoaded', function() {
    
 //    update profile
@@ -49,6 +53,16 @@ document.addEventListener('DOMContentLoaded', function() {
     buttonIds.forEach(function(buttonId) {
         const button = document.getElementById(buttonId + '_button'); ;
         button.addEventListener('click', function() {
+            if(buttonId ==='video')
+                video_start = Date.now();
+            else 
+            {
+                music_spent = Date.now() - music_start;
+                music_start = Date.now();
+               
+            }
+
+
           document.getElementById(buttonId+'_main').style.display = 'flex';
             buttonIds.forEach(function(otherButtonId) {
                 if (otherButtonId !== buttonId) {
