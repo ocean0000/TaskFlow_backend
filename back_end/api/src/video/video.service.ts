@@ -13,7 +13,7 @@ export class VideoService {
       if (!existingUser) {
         return { message: 'Playlist not found' };
       }
-      return { message: 'Playlist found', playlist: existingUser };
+      return { message: 'Playlist found', content: existingUser };
     } catch (error) {
       throw new InternalServerErrorException('Failed to get playlist');
     }
@@ -25,7 +25,7 @@ export class VideoService {
       if (!existingUser) {
         const newVideo = new this.videocollection(video);
         await newVideo.save();
-        return { message: 'Playlist created successfully', playlist: newVideo };
+        return { message: 'Playlist created successfully', content: newVideo };
       }
 
       const updatedVideo = await this.videocollection.findOneAndUpdate(

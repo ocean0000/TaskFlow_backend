@@ -13,7 +13,7 @@ function addVideoToPlaylist(playlistIndex, video) {
     // Tạo phần tử video mới
     const videoItem = document.createElement('li');
     videoItem.innerHTML = `
-        <h3>${video.name}</h3>
+        <h3 contenteditable="true">${video.name}</h3>
         <button class="remove-video-button" data-playlist-index="${playlistIndex}" data-video-index="${playlists[playlistIndex].videos.length - 1}">X</button>
         ${
             video.type === 'mp3'
@@ -31,19 +31,17 @@ function addVideoToPlaylist(playlistIndex, video) {
         const videoIndex = this.getAttribute('data-video-index');
         playlists[playlistIndex].videos.splice(videoIndex, 1); // Xóa video khỏi mảng
         videoItem.remove(); // Xóa phần tử DOM
+        update_database();
     });
 
     // Thêm video vào danh sách hiển thị
     videosList.appendChild(videoItem);
 }
 
-
 function renderPlaylists() {
-    playlists.forEach((playlist, index) => {
-        // Kiểm tra nếu playlist đã tồn tại trong DOM
-        const existingPlaylist = playlistContainer.querySelector(`.playlist[data-index="${index}"]`);
-        if (existingPlaylist) return;
+    playlistContainer.innerHTML = ''; // Xóa nội dung cũ trước khi render
 
+    playlists.forEach((playlist, index) => {
         const playlistElement = document.createElement('div');
         playlistElement.className = 'playlist';
         playlistElement.setAttribute('data-index', index);
@@ -51,7 +49,7 @@ function renderPlaylists() {
         // Header playlist
         playlistElement.innerHTML = `
             <div class="playlist-header">
-                <h2>${playlist.name}</h2>
+                <h2 contenteditable="true">${playlist.name}</h2>
                 <button class="remove-playlist-button" data-index="${index}">Remove</button>
             </div>
             <div class="playlist-inputs">
@@ -67,6 +65,7 @@ function renderPlaylists() {
         removePlaylistButton.addEventListener('click', function () {
             playlists.splice(index, 1); // Xóa playlist khỏi mảng
             playlistElement.remove(); // Xóa playlist khỏi DOM
+            update_database(); // Cập nhật database
         });
 
         // Xử lý upload video
@@ -85,6 +84,7 @@ function renderPlaylists() {
                     };
                     playlists[index].videos.push(newVideo);
                     addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
+                    update_database(); // Cập nhật database
                 }
             });
             uploadInput.click();
@@ -116,13 +116,17 @@ function renderPlaylists() {
                 }
 
                 playlists[index].videos.push(newVideo);
-                addVideoToPlaylist(index, newVideo);
+                addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
                 linkInput.value = ''; // Reset input
+                update_database(); // Cập nhật database
             }
         });
 
         // Thêm playlist vào DOM
         playlistContainer.appendChild(playlistElement);
+
+        // Render video trong playlist này
+        playlist.videos.forEach((video) => addVideoToPlaylist(index, video));
     });
 }
 
@@ -152,11 +156,43 @@ addPlaylistButton.addEventListener('click', function () {
 });
 
 // Render danh sách playlist khi tải trang
-document.addEventListener('DOMContentLoaded', function()
+document.addEventListener('DOMContentLoaded', async function()
 {
 
+    let username = localStorage.getItem('username');
     
+    fetch(`http://localhost:3000/video/get`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        playlists = data.content.playlists;
+        
+        renderPlaylists();
+    });
 
-    renderPlaylists();
+    
 }
 );
+
+
+function update_database()
+{
+    let username = localStorage.getItem('username');
+    fetch(`http://localhost:3000/video/update`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: username, playlists: playlists }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    });
+}
