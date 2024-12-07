@@ -20,7 +20,7 @@ function addVideoToPlaylist(playlistIndex, video) {
                 ? `<audio controls>
                        <source src="${video.source}" type="audio/mp3">
                    </audio>`
-                : `<iframe width="300" height="200" src="${video.source}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
         }
     `;
 
@@ -97,10 +97,11 @@ function renderPlaylists() {
         uploadVideoButton.addEventListener('click', function () {
             const uploadInput = document.createElement('input');
             uploadInput.type = 'file';
-            uploadInput.accept = 'audio/*';
+            uploadInput.accept = 'mp3/*';
             uploadInput.addEventListener('change', function (event) {
                 const file = event.target.files[0];
                 if (file) {
+                    
                     const newVideo = {
                         type: 'mp3',
                         name: file.name,
@@ -194,7 +195,7 @@ document.addEventListener('DOMContentLoaded', async function()
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);
+        
         playlists = data.content.playlists;
         
         renderPlaylists();
@@ -215,8 +216,5 @@ function update_database()
         },
         body: JSON.stringify({ username: username, playlists: playlists }),
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    });
+    
 }

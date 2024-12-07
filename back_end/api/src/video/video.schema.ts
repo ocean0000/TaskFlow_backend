@@ -12,7 +12,7 @@ export class Music {
   name: string;
 
   @Prop({ required: true }) // URL hoặc đường dẫn tệp
-  source: string;
+  source: string ;
 
   @Prop({ default: Date.now }) // Thời gian thêm video
   addedAt: Date;
