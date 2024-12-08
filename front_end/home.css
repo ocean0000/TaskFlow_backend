@@ -145,8 +145,7 @@ body.dark_mode #profile_main label {
 
 /* design for main_contet  */
 .main-content {
-  margin-left: 10px; /* Margin mặc định, bằng width của sidebar khi chưa mở rộng */
-  padding: 20px;
+  
   display: flex;
   flex-direction: column;
   transition: margin-left 0.4s ease; /* Thêm transition để có hiệu ứng mượt */
