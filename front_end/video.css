@@ -2,8 +2,10 @@
 #video_main {
    
    padding: 20px;
-   background-color: #f7f9fc;
+   background: radial-gradient(circle, rgba(238,174,202,1) 0%, rgb(168, 238, 180) 100%);
    gap: 20px;
+   height: 100vh;
+   
    
 }
 

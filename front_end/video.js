@@ -201,12 +201,9 @@ document.addEventListener('DOMContentLoaded', async function()
         renderPlaylists();
     });
 
-    let musicSpent = music_spent;
-    let totalSpent = Date.now() - total_start;
-    console.log(musicSpent);
-    console.log(totalSpent);
+    console.log(timeSpent["video"], timeSpent.total.toFixed(2));
 
-   document.getElementById('chart').innerHTML =`<img src="https://quickchart.io/chart?width=300&height=200&chart={type:'doughnut',data:{labels:['Music','Total'], datasets:[{label:'Music',data:[${musicSpent},${totalSpent}]}]}}" />`; 
+   
 }
 );
 

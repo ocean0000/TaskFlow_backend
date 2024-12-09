@@ -10,9 +10,14 @@ const buttonIds = [
     'film',
     
 ];
-let music_start= Date.now();
-let music_spent = 0;
-let total_start = Date.now();
+
+const timeSpent = { total : 0 }; // Object để lưu thời gian sử dụng cho từng mục
+let currentButtonId = null; // Mục hiện tại
+let startTime = null; // Thời gian bắt đầu của mục hiện tại
+
+buttonIds.forEach(buttonId => {
+    timeSpent[buttonId] = 0; // Mặc định thời gian là 0
+});
 
 document.addEventListener('DOMContentLoaded', function() {
    
@@ -49,32 +54,96 @@ document.addEventListener('DOMContentLoaded', function() {
                console.error('Error:', error);
                alert("Error connection");
             });
+            buttonIds.forEach(function(buttonId) {
+                const button = document.getElementById(buttonId + '_button');
+                button.addEventListener('click', function() {
+                    const now = Date.now();
+            
+                    // Nếu đang ở một mục khác, tính thời gian đã sử dụng
+                    if (currentButtonId && startTime) {
+                        const elapsedTime = (now - startTime) / 1000; // Thời gian bằng giây
+                        timeSpent[currentButtonId] += elapsedTime;
+                        timeSpent.total += elapsedTime;
+                        console.log(`Time spent on ${currentButtonId}: ${timeSpent[currentButtonId]} seconds`);
+                        console.log(`Total time spent: ${timeSpent.total.toFixed(2)} seconds`);
+                    }
+            
+                    // Cập nhật mục hiện tại và thời gian bắt đầu
+                    currentButtonId = buttonId;
+                    startTime = now;
+            
+                    // Hiển thị mục được chọn
+                    document.getElementById(buttonId + '_main').style.display = 'flex';
+            
+                    if(buttonId === 'video')
+                    {
+                        let video_spent_percentage= (timeSpent["video"]/timeSpent.total*100).toFixed(2);
+                        let the_other_percentage = (100 - video_spent_percentage).toFixed(2);
+                        
+                        if(! isNaN(video_spent_percentage))
+                        {
+                            const link_chart =`https://quickchart.io/chart/`
+                            const chartConfig = {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Music', 'Other'],
+                                    datasets: [
+                                        {
+                                            label: 'Time Spent (%)',
+                                            data: [video_spent_percentage, the_other_percentage], // Dữ liệu sẽ được gán động
+                                            backgroundColor: ['#3498db', '#FF5722'], // Màu nền
+                                            borderColor: ['#388E3C', '#E64A19'], // Viền
+                                            borderWidth: 1, // Độ dày viền
+                                        },
+                                    ],
+                                },
+                                options: {
+                                    responsive: true,
+                                    plugins: {
+                                        legend: {
+                                            display: true, // Hiển thị chú thích
+                                            position: 'top', // Vị trí chú thích
+                                            labels: {
+                                                font: {
+                                                    size: 14, // Kích thước chữ
+                                                },
+                                                color: '#333', // Màu chữ
+                                            },
+                                        },
+                                        title: {
+                                            display: true,
+                                            text: 'Time Spent on Activities',
+                                            font: {
+                                                size: 16, // Kích thước tiêu đề
+                                                weight: 'bold',
+                                            },
+                                            color: '#212121', // Màu tiêu đề
+                                        },
+                                    },
+                                },
+                            };
+                            const chartURL = `${link_chart}?width=300&height=200&chart=${encodeURIComponent(
+                                JSON.stringify(chartConfig)
+                            )}`;
+                            
+                            document.getElementById('chart').innerHTML = `<img src="${chartURL}" alt="Chart" />`;
 
-    buttonIds.forEach(function(buttonId) {
-        const button = document.getElementById(buttonId + '_button'); ;
-        button.addEventListener('click', function() {
-            if(buttonId ==='video')
-                video_start = Date.now();
-            else 
-            {
-                music_spent = Date.now() - music_start;
-                music_start = Date.now();
-               
-            }
+                        }
 
+                    }
 
-          document.getElementById(buttonId+'_main').style.display = 'flex';
-            buttonIds.forEach(function(otherButtonId) {
-                if (otherButtonId !== buttonId) {
-                document.getElementById(otherButtonId + '_main').style.display = 'none';
-                }
+                    // Ẩn các mục khác
+                    buttonIds.forEach(function(otherButtonId) {
+                        if (otherButtonId !== buttonId) {
+                            document.getElementById(otherButtonId + '_main').style.display = 'none';
+                        }
+                    });
+                });
             });
-
-         });
-
+            
         
          
-        });
+        
          
 
         
