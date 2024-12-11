@@ -2,12 +2,11 @@ let username = localStorage.getItem('username');
 const buttonIds = [
     'dashboard',
     'overview',
-    'project',
+    'task',
     'profile',
     'notification',
     'video',
-    'setting',
-    'film',
+    'extension',
     
 ];
 
