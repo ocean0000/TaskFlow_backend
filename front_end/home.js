@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function log_out()
 {
       localStorage.removeItem('token');
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
 }
 
 
