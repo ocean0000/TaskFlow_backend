@@ -7,7 +7,7 @@ import { VideoModule } from './video/video.module';
 
 @Module({
   imports: [UserModule,
-    MongooseModule.forRoot('mongodb://localhost:27017/app'),
+    MongooseModule.forRoot('mongodb-production-c3b1.up.railway.app'),
     VideoModule],
   
   controllers: [AppController],
