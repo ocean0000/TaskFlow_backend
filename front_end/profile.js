@@ -47,7 +47,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
         formData.append('profile_image', profileImage);
     }
 
-    fetch('http://localhost:3000/user/update', {
+    fetch('back-end-ocean.up.railway.app/user/update', {
         method: 'POST',
         body: formData
     })

@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //    update profile
    
    
-   fetch('http://localhost:3000/user/get_user', {
+   fetch('back-end-ocean.up.railway.app/user/get_user', {
             method: 'POST',
             headers: {
                   'Content-Type': 'application/json',
