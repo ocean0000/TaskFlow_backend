@@ -94,24 +94,41 @@ function renderPlaylists() {
 
         // Xử lý upload video
         const uploadVideoButton = playlistElement.querySelector('.upload-video-button');
-        uploadVideoButton.addEventListener('click', function () {
-            const uploadInput = document.createElement('input');
-            uploadInput.type = 'file';
-            uploadInput.accept = 'mp3/*';
-            uploadInput.addEventListener('change', function (event) {
-                const file = event.target.files[0];
-                if (file) {
-                    
-                    const newVideo = {
-                        type: 'mp3',
-                        name: file.name,
-                        source: URL.createObjectURL(file),
-                    };
-                    playlists[index].videos.push(newVideo);
-                    addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
-                    update_database(); // Cập nhật database
+uploadVideoButton.addEventListener('click', function () {
+    const uploadInput = document.createElement('input');
+    uploadInput.type = 'file';
+    uploadInput.accept = 'video/*'; // Chấp nhận các tệp video
+    uploadInput.addEventListener('change', async function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch('http://localhost:3000/storage/upload', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to upload file');
                 }
-            });
+
+                const result = await response.json();
+                const newVideo = {
+                    type: 'video',
+                    name: file.name,
+                    source: result.url, // Sử dụng liên kết từ API
+                };
+
+                playlists[index].videos.push(newVideo);
+                addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
+                update_database(); // Cập nhật database
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        }
+    });
             uploadInput.click();
         });
 

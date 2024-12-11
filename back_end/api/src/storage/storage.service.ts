@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import * as cloudinary from 'cloudinary';
+
 import { v2 } from 'cloudinary';
 
 @Injectable()
