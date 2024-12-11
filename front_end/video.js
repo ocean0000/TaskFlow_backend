@@ -20,7 +20,7 @@ function addVideoToPlaylist(playlistIndex, video) {
                 ? `<audio controls>
                        <source src="${video.source}" type="audio/mp3">
                    </audio>`
-                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow=" encrypted-media" allowfullscreen></iframe>`
+                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow="" encrypted-media" allowfullscreen></iframe>`
         }
     `;
 
