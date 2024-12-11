@@ -20,7 +20,7 @@ function addVideoToPlaylist(playlistIndex, video) {
                 ? `<audio controls>
                        <source src="${video.source}" type="audio/mp3">
                    </audio>`
-                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow=" encrypted-media" allowfullscreen></iframe>`
         }
     `;
 
@@ -94,11 +94,11 @@ function renderPlaylists() {
 
         // Xử lý upload video
         const uploadVideoButton = playlistElement.querySelector('.upload-video-button');
-uploadVideoButton.addEventListener('click', function () {
-    const uploadInput = document.createElement('input');
-    uploadInput.type = 'file';
-    uploadInput.accept = 'video/*'; // Chấp nhận các tệp video
-    uploadInput.addEventListener('change', async function (event) {
+        uploadVideoButton.addEventListener('click', function () {
+        const uploadInput = document.createElement('input');
+        uploadInput.type = 'file';
+        uploadInput.accept = '*'; // Chấp nhận các tệp video
+        uploadInput.addEventListener('change', async function (event) {
         const file = event.target.files[0];
         if (file) {
             const formData = new FormData();
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', async function()
 
     let username = localStorage.getItem('username');
     
-    fetch(`https://back-end-ocean.up.railway.app/video/get`, {
+    fetch(`http://localhost:3000/video/get`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', async function()
 function update_database()
 {
     let username = localStorage.getItem('username');
-    fetch(`https://back-end-ocean.up.railway.app/video/update`, {
+    fetch(`http://localhost:3000/video/update`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

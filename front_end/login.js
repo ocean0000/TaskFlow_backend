@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const name =username;
         const email = document.getElementById('registerEmail').value;
 
-        fetch('https://back-end-ocean.up.railway.app/user/register', {
+        fetch('http://localhost:3000/user/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('loginPassword').value;
         
 
-        fetch('https://back-end-ocean.up.railway.app/user/login', {
+        fetch('http://localhost:3000/user/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ function onSignIn(response)
       const data = response;
      
       
-      fetch('https://back-end-ocean.up.railway.app/user/login_google', {
+      fetch('http://localhost:3000/user/login_google', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
