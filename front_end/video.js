@@ -103,6 +103,7 @@ function renderPlaylists() {
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
+            formData.append('folder', 'video');
 
             try {
                 const response = await fetch('http://localhost:3000/storage/upload', {

@@ -12,10 +12,10 @@ export class StorageService {
     });
   }
 
-  async uploadFile(file: Express.Multer.File): Promise<UploadApiResponse> {
+  async uploadFile(file: Express.Multer.File, folder :string): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: 'auto', folder: 'video' },
+        { resource_type: 'auto', folder: folder, unique_filename: true },
         (error, result) => {
           if (error) {
             return reject(error);
