@@ -106,7 +106,7 @@ function renderPlaylists() {
             formData.append('folder', 'video');
 
             try {
-                const response = await fetch('back-end-ocean.up.railway.app/storage/upload', {
+                const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', {
                     method: 'POST',
                     body: formData,
                 });
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', async function()
 
     let username = localStorage.getItem('username');
     
-    fetch(`back-end-ocean.up.railway.app/video/get`, {
+    fetch(`https://back-end-ocean.up.railway.app/video/get`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', async function()
 function update_database()
 {
     let username = localStorage.getItem('username');
-    fetch(`back-end-ocean.up.railway.app/video/update`, {
+    fetch(`https://back-end-ocean.up.railway.app/video/update`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
