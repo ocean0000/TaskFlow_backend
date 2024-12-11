@@ -97,7 +97,7 @@ function renderPlaylists() {
         uploadVideoButton.addEventListener('click', function () {
         const uploadInput = document.createElement('input');
         uploadInput.type = 'file';
-        uploadInput.accept = '*'; // Chấp nhận các tệp video
+        uploadInput.accept = '.mp3,.mp4'; // Chấp nhận các tệp video// audio mp3
         uploadInput.addEventListener('change', async function (event) {
         const file = event.target.files[0];
         if (file) {
@@ -115,8 +115,9 @@ function renderPlaylists() {
                 }
 
                 const result = await response.json();
+                const fileType = file.name.endsWith('.mp3') ? 'mp3' : 'link';
                 const newVideo = {
-                    type: 'video',
+                    type: fileType,
                     name: file.name,
                     source: result.url, // Sử dụng liên kết từ API
                 };
