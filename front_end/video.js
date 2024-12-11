@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', async function()
 
     let username = localStorage.getItem('username');
     
-    fetch(`http://localhost:3000/video/get`, {
+    fetch(`https://back-end-ocean.up.railway.app/video/get`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', async function()
 function update_database()
 {
     let username = localStorage.getItem('username');
-    fetch(`http://localhost:3000/video/update`, {
+    fetch(`https://back-end-ocean.up.railway.app/video/update`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
