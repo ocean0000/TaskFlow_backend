@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { VideoModule } from './video/video.module';
 import { StorageModule } from './storage/storage.module';
 
+import { ProjectModule } from './project/project.module';
+
 
 
 const uri= `mongodb+srv://ulock:ulock1234@ulock.jcmbi.mongodb.net/?retryWrites=true&w=majority&appName=ulock`
@@ -14,7 +16,9 @@ const uri= `mongodb+srv://ulock:ulock1234@ulock.jcmbi.mongodb.net/?retryWrites=t
   imports: [UserModule,
     MongooseModule.forRoot(uri),
     VideoModule,
-    StorageModule],
+    StorageModule,
+   
+    ProjectModule],
   
   controllers: [AppController],
   providers: [AppService],
