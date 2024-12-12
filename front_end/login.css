@@ -69,6 +69,7 @@ h2 {
 .form-group button {
     width: 100%;
     padding: 10px;
+    margin-top : 5px;
     background-color: #007BFF;
     color: white;
     border: none;
@@ -80,10 +81,15 @@ h2 {
     background-color: #0056b3;
 }
 
+<<<<<<< HEAD
 body{
     background-image:url("assests/bg.jpg");
     background-size: cover;
     background-position: center center;
 }
 
+=======
+
+
+>>>>>>> 8e841d3119bac4141724b63de8efde55a1be8ff7
 

@@ -9,9 +9,12 @@
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
   <link rel="stylesheet" href="home.css" />
+  <link rel ="stylesheet" href="profile.css"/>
+  <link rel ="stylesheet" href="video.css"/>
+  <link rel ="stylesheet" href="dashboard.css"/>
 </head>
 
-<body>
+<body id ="body">
   <aside class="sidebar">
     <div class="sidebar-header">
       
@@ -49,7 +52,7 @@
         </button>
         </li>
       <li>
-        <button id ="music_button"><span class="material-symbols-outlined"> music_note </span>Music</a>
+        <button id ="video_button"><span class="material-symbols-outlined"> videocam </span>Video</a>
         </button>
         </li>
       <h4>
@@ -58,7 +61,7 @@
         
       </h4>
       <li>
-        <button id="account_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
+        <button id="profile_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
         </button>
         </li>
       <li>
@@ -77,11 +80,113 @@
   </aside>
 
     <div class="main-content" id ="main_type">
-        <!-- dashboard -->
+      <!-- chat bot  -->
+      <script async src="https://js.usechat.ai/widget/c74a716d-0145-425a-9eaa-17a82d04cc3b.js"></script><a id="usechat-button" style="color: #ddd; font-size: 11px;" href="https://app.usechat.ai/widget/c74a716d-0145-425a-9eaa-17a82d04cc3b">UseChat</a>
+      
+      
+      <!-- dashboard -->
+         
         <div id = "dashboard_main" style="display: flex;">
-            <h1>Dashboard</h1>
-            <p> Welcome to your dashboard. Here you can view your recent activity and notifications. </p>
+          
+          <div class ="news">
+            <h1>News</h1>
+
+            <iframe style="border-radius: 1%;" width="800" height="600" src="https://rss.app/embed/v1/wall/bpiemFoRV79TJ7cW" frameborder="0"></iframe>
+          </div>
+
+          <div class = calendar_weather style="justify-items: center;"    >
+
+         
+          <div class="weather_container">
+            <script>
+              (function(d, s, id) {
+                  if (d.getElementById(id)) {
+                      if (window.__TOMORROW__) {
+                          window.__TOMORROW__.renderWidget();
+                      }
+                      return;
+                  }
+                  const fjs = d.getElementsByTagName(s)[0];
+                  const js = d.createElement(s);
+                  js.id = id;
+                  js.src = "https://www.tomorrow.io/v1/widget/sdk/sdk.bundle.min.js";
+      
+                  fjs.parentNode.insertBefore(js, fjs);
+              })(document, 'script', 'tomorrow-sdk');
+              </script>
+      
+              <div class="tomorrow"
+                 data-location-id="130201"
+                 data-language="EN"
+                 data-unit-system="METRIC"
+                 data-skin="light"
+                 data-widget-type="aqiMini"
+                 style="padding-bottom:22px;position:relative;"
+              >
+                <a
+                  href="https://www.tomorrow.io/weather-api/"
+                  rel="nofollow noopener noreferrer"
+                  target="_blank"
+                  style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
+                >
+                  <img
+                    
+                    src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
+                    width="250"
+                    height="18"
+                    />
+                  </a>
+                </div>
+              </div>
+              
+             
+
+        <div class = "calendar_container">
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+          <div class="card">
+            <div class="calendar-toolbar">
+              <button class="prev month-btn">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <div class="current-month"></div>
+              <button class="next month-btn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+            <div class="calendar">
+              <div class="weekdays">
+                <div class="weekday-name">Mo</div>
+                <div class="weekday-name">Tu</div>
+                <div class="weekday-name">We</div>
+                <div class="weekday-name">Th</div>
+                <div class="weekday-name">Fr</div>
+                <div class="weekday-name">Sa</div>
+                <div class="weekday-name">Su</div>
+              </div>
+              <div class="calendar-days"></div>
+            </div>
+            <div class="goto-buttons">
+              <button type="button" class="btn prev-year">Prev Year</button>
+              <button type="button" class="btn today">Today</button>
+              <button type="button" class="btn next-year">Next Year</button>
+            </div>
+          </div>
+
         </div>
+
+          </div>
+        
+        <script src="dashboard.js"></script>
+        
+        
+        
+        
+        
+        
+        </div>
+
+
+
         <!-- overview -->
         <div id = "overview_main" style="display: none;">
             <h1>Overview</h1>
@@ -103,21 +208,118 @@
             <h1>Films</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
-        <!-- music -->
-        <div id = "music_main" style="display: none;">
-            <h1>Music</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+        <!-- video -->
+        <div id = "video_main" style="display: none;">
+          
+          <div class="playlist_box">
+          <div class="input_playlist">
+            <button id="add_playlist_button">Add Playlist</button>
+            <input type="text" id="playlist_name" placeholder="Enter playlist name">
+            
+          </div>
+            
+            <div class="playlist_container"></div>
+            
+          </div>
+
+          <div id="chart">
+            
+          </div>
         </div>
+        
+
+
+
         <!-- profile -->
-        <div id = "profile_main" style="display: none;">
-            <h1>Profile</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+        <div id = "profile_main" style="display: none">
+          
+        <div class="profile-container">
+            <form id="profileForm">
+              
+              <div class="profile-image-container">
+                <img id="profileImage" src="assests/bg.jpg" >
+                <input type="file" id="profileInput" accept="image/*">
+                <button id="uploadButton"><span class="material-symbols-outlined"> photo_camera </span></button> <!-- Nút nhấn nhỏ -->
+              </div>
+              <h1 id ="name"></h1>
+          
+
+            <label for="name">New Name:</label>
+          
+
+            <input type="text" id="new_name" name="new_name" minlength="6">
+
+            <label for="password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" minlength="6" >
+              
+            <!-- submit button  -->
+            <div>
+
+              <button type="submit" id ="submit_button" >Change profile</button>
+            </div>
+
+            </form>
+        
+            <!-- background change -->
+          <div>
+            <label for="backgroundSelect">Background:</label>
+            <select id="backgroundSelect">
+                <option value="light_mode">Light</option>
+                <option value="dark_mode">Dark</option>
+            </select>
+          </div>
+        
+          <!-- code background change -->
+          <script>
+            // Function to set the background mode
+            function setBackgroundMode(mode) {
+              
+              var body = document.getElementById('body');
+              if (body) {
+                body.className = mode;
+                document.getElementById('backgroundSelect').value = mode;
+              }
+            }
+            
+            // Load the saved background mode from local storage
+            document.addEventListener('DOMContentLoaded', function() {
+              var savedMode = localStorage.getItem('backgroundMode') || 'light_mode';
+              setBackgroundMode(savedMode);
+            });
+            
+            // Save the selected background mode to local storage
+            document.getElementById('backgroundSelect').addEventListener('change', function() {
+              var selectedMode = this.value;
+              localStorage.setItem('backgroundMode', selectedMode);
+              setBackgroundMode(selectedMode);
+            });
+            </script>
+
+        </div>
+
+        <!-- description -->
+        <div class ="description_container">
+          <label for = "description">Description:</label>
+          <textarea id="description" name="description" rows="4" cols="50" placeholder="Enter description here"></textarea>
+          
+
+
+        </div>
+        
+        
+        
+
+
+
+
+
+
         </div>
         <!-- settings -->
         <div id = "setting_main" style="display: none;">
             <h1>Settings</h1>
             <p> Here you can view your recent activity and notifications. </p>
-            <input type="file" id="fileLocation" webkitdirectory directory multiple>
+            
         </div>
 
 
@@ -128,4 +330,6 @@
 
 </body>
 <script src="home.js"></script>
+<script src ="profile.js"></script>
+<script src ="video.js"></script>
 </html>

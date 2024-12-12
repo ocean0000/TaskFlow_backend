@@ -10,7 +10,22 @@
 
 body {
   min-height: 100vh;
-  background: #F0F4FF;
+}
+
+
+body.light_mode {
+  background-color: white;
+  color: black;
+}
+body.dark_mode {
+  background-color: black;
+  color: white;
+}
+
+
+body.dark_mode #profile_main label {
+  color: white;
+
 }
 
 .sidebar {
@@ -29,6 +44,7 @@ body {
 
 .sidebar:hover {
   width: 250px;
+  
 }
 
 .sidebar .sidebar-header {
@@ -126,4 +142,18 @@ body {
    text-decoration: none;
    transition: 0.2s ease;
 }
+
+/* design for main_contet  */
+.main-content {
+  
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.4s ease; /* Thêm transition để có hiệu ứng mượt */
+}
+
+/* Khi sidebar mở rộng */
+.sidebar:hover + .main-content {
+  margin-left: 250px; /* Dịch main-content sang khi sidebar mở rộng */
+}
+
 

@@ -13,6 +13,11 @@ export class UserService {
    //create a new collection
 
 
+   async get_user(user: User) {
+      const users = await this.userscollection.findOne({ username: user.username });
+      return users;
+   }
+
    async register(user: User) {
       
       const existingUser = await this.userscollection.findOne({ username: user.username });
@@ -31,13 +36,11 @@ export class UserService {
 
    async login(user: User) {
       const existingUser = await this.userscollection.findOne({ username: user.username });
-      if (!existingUser) {
-         return { message: 'User does not exist' };
+      if (!existingUser || existingUser.password !== user.password) {
+         return { message: 'Username or Password is incorrect' , user:existingUser};
       }
-      if (existingUser.password !== user.password) {
-         return { message: 'Password is incorrect' };
-      }
-      return { message: 'Login successfully' };
+      
+      return { message: 'Login successfully', user: existingUser };
    }
 
    async login_google(jwt: any) {
@@ -47,14 +50,31 @@ export class UserService {
       const username = data.name; 
       const email = data.email;
       const name = username;
+      const profile_image = "none";
       const existingUser = await this.userscollection.findOne({ username: username });
       if (!existingUser) {
-         const newUser = new this.userscollection({ name, email, username});
+         const newUser = new this.userscollection({ name, email, username, profile_image });
          await newUser.save();
       }
-      return true;
+      
+      return {username, email};
 
    
    }
-       
+
+   async update(user: User) {
+      const username = user.username;
+      
+      const existingUser = await this.userscollection.findOne({ username });
+      if (!existingUser) {
+         return ;
+      }
+      const  newuser=   await this.userscollection.findOneAndUpdate({ username }, user, { new: true });
+      
+      return newuser;
+
+
+   }
+
+
 }
