@@ -82,7 +82,7 @@
 
     </div>
   </aside>
-
+    
     <div class="main-content" id ="main_type">
       <!-- chat bot  -->
       <script async src="https://js.usechat.ai/widget/c74a716d-0145-425a-9eaa-17a82d04cc3b.js"></script><a id="usechat-button" style="color: #ddd; font-size: 11px;" href="https://app.usechat.ai/widget/c74a716d-0145-425a-9eaa-17a82d04cc3b">UseChat</a>
@@ -197,18 +197,48 @@
         <div id = "overview_main" style="display: none;">
             <h1>Overview</h1>
             <p> Here you can view your recent activity and notifications. </p>
+            
 
         </div>
 
 
         <!-- tasks -->
-        <div id = "task_main" style="display: none;">
-            
-          <h1>Task Management</h1>
+        <div id="task_main" style="display: none;">
+          <div>Project Manager</div>
           
           
-        </div>
 
+          
+          <div class="task_container">
+            
+            <div class="input_task">
+              <input type="text" id="project_name" placeholder="Enter project name">
+              <button id="add_project_button">Add Project</button>
+            </div>
+        
+           
+            <div class="filter">
+              <label for="progress_filter">Progress:</label>
+              <select id="progress_filter" class="progress">
+                <option value="all">All</option>
+                <option value="completed">Completed</option>
+                <option value="uncompleted">Uncompleted</option>
+              </select>
+              <label for="level_filter">Priority:</label>
+              <select id="level_filter" class="level">
+                <option value="all">ALL</option>
+                <option value="high" style="color: red;">HIGH</option>
+                <option value="medium" style="color: orange;">MEDIUM</option>
+                <option value="low" style="color: green;">LOW</option>
+              </select>
+            </div>
+          </div>
+       
+          <!-- Project List -->
+          <div class="project_list"> </div>
+
+        </div>
+        
         <!-- notifications -->
         <div id = "notification_main" style="display: none;">
 
@@ -249,7 +279,7 @@
     <button id="cancel-button">Hủy</button>
   </div>
   
-<h1>Tạo Quiz</h1>
+<h1></h1>
 <div class="quiz-form">
   <input type="text" id="question-input" placeholder="Nhập câu hỏi" />
   <input type="text" id="answer-A-input" placeholder="Đáp án A" />
@@ -404,4 +434,5 @@
 <script src ="video.js"></script>
 <script src ="task.js"></script>
 <script src ="extension.js"></script>
+
 </html>
