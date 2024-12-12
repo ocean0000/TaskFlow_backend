@@ -12,22 +12,18 @@ export class StorageService {
     });
   }
 
-  async uploadFile(file: Express.Multer.File, folder :string): Promise<UploadApiResponse> {
+  async uploadFile(file: Express.Multer.File, folder: string, rawConvert: string = 'aspose'): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { resource_type: 'auto', folder: folder, unique_filename: true },
+        { resource_type: 'auto', folder: folder, unique_filename: true, raw_convert: rawConvert },
         (error, result) => {
           if (error) {
             return reject(error);
           }
-          resolve(result as UploadApiResponse); // Đảm bảo kết quả đúng kiểu
+          resolve(result as UploadApiResponse);
         },
       );
-
-      const readableStream = new Readable();
-      readableStream.push(file.buffer);
-      readableStream.push(null);
-      readableStream.pipe(uploadStream);
+      Readable.from(file.buffer).pipe(uploadStream);
     });
   }
 }
