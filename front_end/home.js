@@ -2,12 +2,11 @@ let username = localStorage.getItem('username');
 const buttonIds = [
     'dashboard',
     'overview',
-    'project',
+    'task',
     'profile',
     'notification',
     'video',
-    'setting',
-    'film',
+    'extension',
     
 ];
 
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 //    update profile
    
    
-   fetch('http://localhost:3000/user/get_user', {
+   fetch('https://back-end-ocean.up.railway.app/user/get_user', {
             method: 'POST',
             headers: {
                   'Content-Type': 'application/json',
@@ -158,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function log_out()
 {
       localStorage.removeItem('token');
-      window.location.href = 'login.html';
+      window.location.href = 'index.html';
 }
 
 

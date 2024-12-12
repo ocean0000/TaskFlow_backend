@@ -12,6 +12,7 @@
   <link rel ="stylesheet" href="profile.css"/>
   <link rel ="stylesheet" href="video.css"/>
   <link rel ="stylesheet" href="dashboard.css"/>
+  <link rel ="stylesheet" href="task.css"/>
 </head>
 
 <body id ="body">
@@ -36,11 +37,12 @@
       </li>
       
       <li>
-        <button id ="project_button"><span class="material-symbols-outlined"> folder </span>Projects</a>
+        <button id ="task_button"><span class="material-symbols-outlined"> folder </span>Tasks</a>
         </button>
         </li>
       <li>
         <button id ="notification_button" ><span class="material-symbols-outlined"> notifications_active </span>Notifications</a>
+        </button>
       </li>
       <h4>
         <span>Entertainment</span>
@@ -48,7 +50,7 @@
       </h4>
       
       <li>
-        <button id ="film_button"><span class="material-symbols-outlined"> videocam </span>Films</a>
+        <button id ="extension_button"><span class="material-symbols-outlined"> extension </span>Extensions</a>
         </button>
         </li>
       <li>
@@ -60,13 +62,14 @@
         <span>Account</span>
         
       </h4>
+
       <li>
         <button id="profile_button"  ><span class="material-symbols-outlined"> account_circle </span>Profile</a>
         </button>
         </li>
-      <li>
-        <button id ="setting_button"><span class="material-symbols-outlined"> settings </span>Settings</a>
-      </li>
+      
+        
+
       <li>
         <button onclick="log_out()"><span class="material-symbols-outlined"> logout </span>Logout</a>
         </button>
@@ -98,6 +101,7 @@
 
          
           <div class="weather_container">
+            
             <script>
               (function(d, s, id) {
                   if (d.getElementById(id)) {
@@ -119,7 +123,7 @@
                  data-location-id="130201"
                  data-language="EN"
                  data-unit-system="METRIC"
-                 data-skin="light"
+                 data-skin="dark"
                  data-widget-type="aqiMini"
                  style="padding-bottom:22px;position:relative;"
               >
@@ -130,14 +134,15 @@
                   style="position: absolute; bottom: 0; transform: translateX(-50%); left: 50%;"
                 >
                   <img
-                    
+                    alt="Powered by the Tomorrow.io Weather API"
                     src="https://weather-website-client.tomorrow.io/img/powered-by.svg"
                     width="250"
                     height="18"
-                    />
-                  </a>
-                </div>
+                  />
+                </a>
               </div>
+
+          </div>
               
              
 
@@ -193,21 +198,33 @@
             <p> Here you can view your recent activity and notifications. </p>
 
         </div>
-        <!-- projects -->
-        <div id = "project_main" style="display: none;">
-            <h1>Projects</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+
+
+        <!-- tasks -->
+        <div id = "task_main" style="display: none;">
+            
+          <h1>Task Management</h1>
+          
+          
         </div>
+
         <!-- notifications -->
         <div id = "notification_main" style="display: none;">
+
             <h1>Notifications</h1>
             <p> Here you can view your recent activity and notifications. </p>
+            
         </div>
-        <!-- films -->
-        <div id = "film_main" style="display: none;">
+        
+
+
+        <!-- extension -->
+        <div id = "extension_main" style="display: none;">
             <h1>Films</h1>
             <p> Here you can view your recent activity and notifications. </p>
         </div>
+
+
         <!-- video -->
         <div id = "video_main" style="display: none;">
           
@@ -237,7 +254,7 @@
             <form id="profileForm">
               
               <div class="profile-image-container">
-                <img id="profileImage" src="assests/bg.jpg" >
+                <img id="profileImage" src="assets/bg.jpg" >
                 <input type="file" id="profileInput" accept="image/*">
                 <button id="uploadButton"><span class="material-symbols-outlined"> photo_camera </span></button> <!-- Nút nhấn nhỏ -->
               </div>
@@ -315,6 +332,8 @@
 
 
         </div>
+
+
         <!-- settings -->
         <div id = "setting_main" style="display: none;">
             <h1>Settings</h1>
@@ -332,4 +351,5 @@
 <script src="home.js"></script>
 <script src ="profile.js"></script>
 <script src ="video.js"></script>
+<script src ="task.js"></script>
 </html>

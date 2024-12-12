@@ -1,0 +1,75 @@
+#task_main {
+   max-width: 800px;
+   margin: 20px auto;
+   background: #fff;
+   border-radius: 5px;
+   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+   padding: 20px;
+}
+
+
+.task-form {
+   margin-bottom: 20px;
+}
+
+.task-form input, .task-form select, .task-form textarea, .task-form button {
+   width: 100%;
+   padding: 10px;
+   margin: 5px 0;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+}
+
+.task-list {
+   margin-top: 20px;
+}
+
+.task-item {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 10px;
+   border: 1px solid #ddd;
+   border-radius: 4px;
+   margin-bottom: 10px;
+   background: #f9f9f9;
+}
+
+.task-item .details {
+   flex-grow: 1;
+}
+
+.priority-high {
+   color: red;
+}
+
+.priority-medium {
+   color: orange;
+}
+
+.priority-low {
+   color: green;
+}
+
+.task-item button {
+   margin-left: 10px;
+   background: #ff4d4d;
+   color: white;
+   border: none;
+   border-radius: 4px;
+   cursor: pointer;
+}
+
+.task-item button.edit {
+   background: #4caf50;
+}
+
+.filters {
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 20px;
+}
+
+.filters select {
+   width: 48%;
+}
