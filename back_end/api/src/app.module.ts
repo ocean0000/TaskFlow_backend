@@ -8,7 +8,7 @@ import { StorageModule } from './storage/storage.module';
 
 
 
-const uri= `mongodb+srv://ulock:ulock@ulock.jcmbi.mongodb.net/?retryWrites=true&w=majority&appName=ulock`
+const uri= `mongodb+srv://ulock:ulock1234@ulock.jcmbi.mongodb.net/?retryWrites=true&w=majority&appName=ulock`
 
 @Module({
   imports: [UserModule,
