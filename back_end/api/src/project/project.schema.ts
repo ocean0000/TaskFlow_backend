@@ -22,8 +22,11 @@ export class Task {
   @Prop()
   name: string;
 
-  @Prop({ enum: ['completed', 'uncompleted'], default: 'uncompleted' })
-  progress: string;
+   @Prop()
+   startDate: string;
+
+   @Prop()
+   endDate: string;
 
   @Prop({ enum: ['low', 'medium', 'high'], default: 'low' })
   level: string;
