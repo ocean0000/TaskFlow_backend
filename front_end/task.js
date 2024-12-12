@@ -1,104 +1,49 @@
+let Tasks =  [];
+
+const taskMain = document.getElementById('task_main');
+const projectNameInput = document.getElementById('project_name');
+const addProjectButton = document.getElementById('add_project_button');
+const projectList = document.querySelector('.project_list');
+
 document.addEventListener('DOMContentLoaded', () => {
   // Lấy các phần tử HTML
-  const taskMain = document.getElementById('task_main');
   const projectNameInput = document.getElementById('project_name');
   const addProjectButton = document.getElementById('add_project_button');
   const projectList = document.querySelector('.project_list');
+  const progressFilter = document.getElementById('progress_filter');
+  const levelFilter = document.getElementById('level_filter');
 
-  // Mảng chứa danh sách dự án
-  let projects = [];
+  // Tạo một mảng để lưu trữ các dự án
+  let Tasks = [];
 
-  // Hàm upload file lên API
-  
+  getProjectsFromDatabase(); // Lấy dữ liệu từ database
 
-  // Hàm hiển thị danh sách dự án
-  function renderProjectList() {
-    projectList.innerHTML = '';
-    projects.forEach((project, index) => {
-      const projectItem = document.createElement('div');
-      projectItem.classList.add('project');
-      projectItem.innerHTML = `
-        <div class="project-header">
-          <h2>${project.name}</h2>
-          <select class="progress-select">
-            <option value="completed" ${project.progress === 'completed' ? 'selected' : ''}>Completed</option>
-            <option value="uncompleted" ${project.progress === 'uncompleted' ? 'selected' : ''}>Uncompleted</option>
-          </select>
-          <select class="level-select">
-            <option value="high" ${project.level === 'high' ? 'selected' : ''}>High</option>
-            <option value="medium" ${project.level === 'medium' ? 'selected' : ''}>Medium</option>
-            <option value="low" ${project.level === 'low' ? 'selected' : ''}>Low</option>
-          </select>
-          <button class="delete-button">Delete</button>
-        </div>
-        <div class="project-note">
-          <label for="note-${index}">Note:</label>
-          <textarea id="note-${index}" class="note-input">${project.note || ''}</textarea>
-        </div>
-        <div class="project-upload">
-          <div class="file-upload-wrapper">
-            <input type="file" id="file-upload-${index}" class="file-upload" multiple />
-            <span class="custom-file-label">Choose Files</span>
-          </div>
-          <div class="file-list">
-            ${project.files.map(file => `<span>${file.name} (${file.url})</span>`).join('<br>')}
-          </div>
-        </div>
-        <button class="save-button">Save</button>
-      `;
-      projectList.appendChild(projectItem);
+  // Hàm định dạng ngày thành YYYY-MM-DD
+  function formatDate(date) {
+    const d = new Date(date);
+    const month = '' + (d.getMonth() + 1);
+    const day = '' + d.getDate();
+    const year = d.getFullYear();
 
-      // Xử lý upload file
-      projectItem.querySelector('.file-upload').addEventListener('change', async (e) => {
-        const uploadedFiles = Array.from(e.target.files);
-        try {
-          const uploadedLinks = await Promise.all(uploadedFiles.map(uploadFileToAPI));
-          uploadedFiles.forEach((file, i) => {
-            project.files.push({ name: file.name, url: uploadedLinks[i] });
-          });
-          renderProjectList(); // Cập nhật lại danh sách dự án sau khi upload
-        } catch (error) {
-          alert('Failed to upload one or more files');
-        }
-      });
-
-      // Xử lý nút Save
-      projectItem.querySelector('.save-button').addEventListener('click', () => {
-        project.note = projectItem.querySelector('.note-input').value;
-        project.progress = projectItem.querySelector('.progress-select').value;
-        project.level = projectItem.querySelector('.level-select').value;
-        
-        saveProjectsToDatabase(); // Cập nhật database
-
-        renderProjectList();
-
-
-
-      });
-
-
-
-
-      // Xử lý nút Delete
-      projectItem.querySelector('.delete-button').addEventListener('click', () => {
-        projects.splice(index, 1);
-        renderProjectList();
-      });
-    });
+    return [year, month.padStart(2, '0'), day.padStart(2, '0')].join('-');
   }
 
   // Hàm thêm dự án mới
   function addProject() {
     const projectName = projectNameInput.value.trim();
     if (projectName) {
+      const currentDate = new Date();
+      const formattedDate = formatDate(currentDate);
       const newProject = {
         name: projectName,
-        progress: 'uncompleted',
+        startDate: formattedDate,
+        endDate: formattedDate,
         level: 'low',
         note: '',
         files: [], // Danh sách file sẽ lưu trữ { name, url }
       };
-      projects.push(newProject);
+
+      Tasks.push(newProject);
       projectNameInput.value = '';
       renderProjectList();
     }
@@ -106,59 +51,263 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Lắng nghe sự kiện click nút Add Project
   addProjectButton.addEventListener('click', addProject);
-});
 
-// save to database
-async function saveProjectsToDatabase() {
-  const username = localStorage.getItem('username'); // Lấy username từ localStorage
+  // Lắng nghe sự kiện thay đổi bộ lọc
+  progressFilter.addEventListener('change', renderProjectList);
+  levelFilter.addEventListener('change', renderProjectList);
+
+  // Hàm hiển thị danh sách dự án
+  function renderProjectList() {
+    const progressValue = progressFilter.value;
+    const levelValue = levelFilter.value;
+    const currentDate = new Date();
+    projectList.innerHTML = '';
+    Tasks.forEach((project, projectIndex) => {
+      const projectStartDate = new Date(project.startDate);
+      const projectEndDate = new Date(project.endDate);
+      let showProject = true;
+
+      if( progressValue === 'Running' && (currentDate < projectStartDate || currentDate > projectEndDate)) {
+        showProject = false;
+      } 
+      else if (progressValue === 'Ended' && currentDate < projectEndDate) {
+        showProject = false;
+      }
+      else if (progressValue === 'Comming'   && currentDate > projectStartDate) {
+        showProject = false;
+      }
+      else if( levelValue !== 'all' && project.level !== levelValue) {
+        showProject = false;
+      }
+      else 
+      {
+        showProject = true;
+      }
+
+      
+
+      if (showProject) {
+        const projectItem = document.createElement('div');
+        projectItem.classList.add('project_item');
+        projectItem.innerHTML = `
+          <div class="project-header">
+            <h2 class="project-name">${project.name}</h2>
+            <div class="project-controls">
+              <div class="project-details">
+                <label for="level-${projectIndex}">Level:</label>
+                <select id="level-${projectIndex}" class="level-select">
+                  <option value="high" ${project.level === 'high' ? 'selected' : ''}>High</option>
+                  <option value="medium" ${project.level === 'medium' ? 'selected' : ''}>Med</option>
+                  <option value="low" ${project.level === 'low' ? 'selected' : ''}>Low</option>
+                </select>
+              </div>
+              <button class="delete-button">🗑️</button>
+            </div>
+          </div>
+          <div class="project-dates">
+            <label for="start-date-${projectIndex}">Start Date:</label>
+            <input type="date" id="start-date-${projectIndex}" class="start-date" value="${project.startDate || ''}">
+            <label for="end-date-${projectIndex}">End Date:</label>
+            <input type="date" id="end-date-${projectIndex}" class="end-date" value="${project.endDate || ''}">
+          </div>
+          <div class="project-note">
+            <label for="note-${projectIndex}">Note:</label>
+            <textarea id="note-${projectIndex}" class="note-input">${project.note || ''}</textarea>
+          </div>
+          <div class="project-upload">
+            <div class="file-upload-wrapper">
+              <input type="file" id="file-upload-${projectIndex}" class="file-upload" multiple />
+              <span class="custom-file-label">Choose Files</span>
+            </div>
+            <div class="file-list">
+            ${project.files.map((file, fileIndex) => renderFileItem(file, projectIndex, fileIndex)).join('')}
+            </div>
+          </div>
+          <button class="save-button">Save</button>
+        `;
+        projectList.appendChild(projectItem);
+
+        // Xử lý upload file
+        projectItem.querySelector('.file-upload').addEventListener('change', async (e) => {
+          const uploadedFiles = Array.from(e.target.files);
+          try {
+            const uploadedLinks = await Promise.all(uploadedFiles.map(uploadFileToAPI));
+            uploadedFiles.forEach((file, i) => {
+              project.files.push({ name: file.name, filepath: uploadedLinks[i], filetype: file.type, filename: file.name });
+            });
+            renderProjectList(); // Cập nhật lại danh sách dự án sau khi upload
+          } catch (error) {
+            alert('Failed to upload one or more files');
+          }
+        });
+
+        // Xử lý nút Save
+        projectItem.querySelector('.save-button').addEventListener('click', () => {
+          project.note = projectItem.querySelector('.note-input').value;
+          project.level = projectItem.querySelector('.level-select').value;
+          project.startDate = projectItem.querySelector('.start-date').value;
+          project.endDate = projectItem.querySelector('.end-date').value;
+          
+          saveProjectsToDatabase(); // Cập nhật database
+          renderProjectList();
+        });
+
+        // Xử lý nút Delete
+        projectItem.querySelector('.delete-button').addEventListener('click', () => {
+          Tasks.splice(projectIndex, 1);
+          renderProjectList();
+          saveProjectsToDatabase(); // Cập nhật database
+        });
+
+        // Xử lý nút Delete File
+        projectItem.querySelectorAll('.delete-file-button').forEach(button => {
+          button.addEventListener('click', async (e) => {
+            const projectIndex = e.target.getAttribute('data-project-index');
+            const fileIndex = e.target.getAttribute('data-file-index');
+            const file = Tasks[projectIndex].files[fileIndex];
+
+            try {
+              
+              Tasks[projectIndex].files.splice(fileIndex, 1);
+              renderProjectList(); // Cập nhật lại danh sách dự án sau khi xóa file
+            } catch (error) {
+              alert('Failed to delete file');
+            }
+          });
+        });
+      }
+    });
+  }
 
   
 
-  const payload = {
-    username,
-    projects,
-  };
+  // upload file to API
+  async function uploadFileToAPI(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('folder', 'projects'); // Thư mục lưu trữ file
 
-  try {
-    const response = await fetch('https://back-end-ocean.up.railway.app/project/update', { // Thay '/api/save-projects' bằng URL của API backend
+    try {
+      const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', { // Thay bằng API upload của bạn
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+      const result = await response.json();
+      return result.url; // Trả về URL của file đã upload
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+      throw error;
+    }
+  }
+
+  // Hàm lấy dữ liệu từ database
+  async function getProjectsFromDatabase() {
+    const username = localStorage.getItem('username'); // Lấy username từ localStorage
+
+    fetch('https://back-end-ocean.up.railway.app/project/get', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to save projects');
-    }
-
-    const result = await response.json();
-    alert('Projects saved successfully');
-    
-  } catch (error) {
-    
-    alert('Failed to save projects');
+      body: JSON.stringify({ username }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+        if (data.content) {
+          Tasks = data.content.Tasks;
+          renderProjectList();
+        }
+      })
+      .catch(error => {
+        console.error('Failed to get projects:', error);
+      });
   }
-}
 
-// upload file to API
-async function uploadFileToAPI(file) {
-  const formData = new FormData();
-  formData.append('file', file);
+  // Hàm lưu dự án vào database
+  async function saveProjectsToDatabase() {
+    const username = localStorage.getItem('username'); // Lấy username từ localStorage
 
-  try {
-    const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', { // Thay bằng API upload của bạn
+    fetch('https://back-end-ocean.up.railway.app/project/update', { // Thay '/api/save-Tasks' bằng URL của API backend
       method: 'POST',
-      body: formData,
-    });
-    if (!response.ok) {
-      throw new Error('Failed to upload file');
-    }
-    const data = await response.json();
-    return data.url; // Định dạng trả về: { url: "https://example.com/file.jpg" }
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    throw error;
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, Tasks }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Project created successfully' || data.message === 'Project updated successfully') {
+          
+        }
+      })
+      .catch(error => {
+        console.error('Failed to save Tasks:', error);
+      });
   }
+});
+
+function truncateFilename(filename, maxLength = 10) {
+  if (filename.length > maxLength) {
+    return filename.substring(0, maxLength) + '...';
+  }
+  return filename;
 }
 
+function renderFileItem(file, projectIndex, fileIndex) {
+  if (!file || !file.filetype) {
+    return `
+      <div class="file-item">
+        <div class="file-icon unknown"></div>
+        <span class="file-name" title="${file.name || 'Unknown file'}">
+          <a href="${file.filepath || '#'}" target="_blank">${truncateFilename(file.name || 'Unknown file')}</a>
+        </span>
+        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+      </div>`;
+  }
+
+  if (file.filetype.startsWith('image/')) {
+    return `
+      <div class="file-item">
+        <a href="${file.filepath}" target="_blank">
+          <img src="${file.filepath}" alt="${file.filename}" class="file-thumbnail" title="${file.filename}" />
+        </a>
+        <span class="file-name" title="${file.filename}">
+          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
+        </span>
+        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+      </div>`;
+  } else if (file.filetype.startsWith('video/')) {
+    return `
+      <div class="file-item">
+        <a href="${file.filepath}" target="_blank">
+          <video controls src="${file.filepath}" title="${file.filename}" class="file-video"></video>
+        </a>
+        <span class="file-name" title="${file.filename}">
+          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
+        </span>
+        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+      </div>`;
+  } else if (file.filetype === 'application/pdf') {
+    return `
+      <div class="file-item">
+        <div class="file-icon-pdf"></div>
+        <span class="file-name" title="${file.filename}">
+          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (PDF)</a>
+        </span>
+        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+      </div>`;
+  } else {
+    return `
+      <div class="file-item">
+        <div class="file-icon other"></div>
+        <span class="file-name" title="${file.filename}">
+          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (${file.filetype})</a>
+        </span>
+        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+      </div>`;
+  }
+}
