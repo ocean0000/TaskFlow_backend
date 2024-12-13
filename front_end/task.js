@@ -55,6 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lắng nghe sự kiện thay đổi bộ lọc
   progressFilter.addEventListener('change', renderProjectList);
   levelFilter.addEventListener('change', renderProjectList);
+  console.log(Tasks)
+
+  function showLoadingSpinner(spinnerElement) {
+    spinnerElement.style.display = 'inline-block';
+  }
+  
+  function hideLoadingSpinner(spinnerElement) {
+    spinnerElement.style.display = 'none';
+  }
+  
 
   // Hàm hiển thị danh sách dự án
   function renderProjectList() {
@@ -89,13 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (showProject) {
         const projectItem = document.createElement('div');
         projectItem.classList.add('project_item');
+        projectItem.setAttribute('data-level', project.level);
         projectItem.innerHTML = `
           <div class="project-header">
-            <h2 class="project-name">${project.name}</h2>
+            <h2 class="project-name" contenteditable="true">${project.name}</h2>
             <div class="project-controls">
               <div class="project-details">
                 <label for="level-${projectIndex}">Level:</label>
-                <select id="level-${projectIndex}" class="level-select">
+                <select id="level-${projectIndex}" class="level-select" onchange="this.parentElement.parentElement.parentElement.parentElement.setAttribute('data-level', this.value)">
                   <option value="high" ${project.level === 'high' ? 'selected' : ''}>High</option>
                   <option value="medium" ${project.level === 'medium' ? 'selected' : ''}>Med</option>
                   <option value="low" ${project.level === 'low' ? 'selected' : ''}>Low</option>
@@ -106,9 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
           <div class="project-dates">
             <label for="start-date-${projectIndex}">Start Date:</label>
-            <input type="date" id="start-date-${projectIndex}" class="start-date" value="${project.startDate || ''}">
+            <input type="date"   id="start-date-${projectIndex}" class="start-date" value="${project.startDate || ''}">
             <label for="end-date-${projectIndex}">End Date:</label>
-            <input type="date" id="end-date-${projectIndex}" class="end-date" value="${project.endDate || ''}">
+            <input type="date"   id="end-date-${projectIndex}" class="end-date" value="${project.endDate || ''}">
           </div>
           <div class="project-note">
             <label for="note-${projectIndex}">Note:</label>
@@ -118,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="file-upload-wrapper">
               <input type="file" id="file-upload-${projectIndex}" class="file-upload" multiple />
               <span class="custom-file-label">Choose Files</span>
+              <div id="loading-spinner-${projectIndex}" class="loading-spinner" style="display: none;"></div>
             </div>
             <div class="file-list">
             ${project.files.map((file, fileIndex) => renderFileItem(file, projectIndex, fileIndex)).join('')}
@@ -130,16 +142,35 @@ document.addEventListener('DOMContentLoaded', () => {
         // Xử lý upload file
         projectItem.querySelector('.file-upload').addEventListener('change', async (e) => {
           const uploadedFiles = Array.from(e.target.files);
+          const spinnerElement = document.getElementById(`loading-spinner-${projectIndex}`);
+          showLoadingSpinner(spinnerElement);
           try {
             const uploadedLinks = await Promise.all(uploadedFiles.map(uploadFileToAPI));
             uploadedFiles.forEach((file, i) => {
               project.files.push({ name: file.name, filepath: uploadedLinks[i], filetype: file.type, filename: file.name });
             });
+            
+            saveProjectsToDatabase(); // Cập nhật database
             renderProjectList(); // Cập nhật lại danh sách dự án sau khi upload
           } catch (error) {
             alert('Failed to upload one or more files');
           }
+          finally {
+            hideLoadingSpinner(spinnerElement);
+          }
         });
+
+        // Xử lý sự kiện thay đổi tên dự án
+       projectItem.querySelector('.project-name').addEventListener('input', (e) => {
+          project.name = e.target.innerText;
+          saveProjectsToDatabase(); // Cập nhật database
+        });
+
+        projectItem.querySelector('.level-select').addEventListener('change', (e) => {
+          project.level = e.target.value;
+          saveProjectsToDatabase(); // Cập nhật database
+        });
+
 
         // Xử lý nút Save
         projectItem.querySelector('.save-button').addEventListener('click', () => {
@@ -149,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
           project.endDate = projectItem.querySelector('.end-date').value;
           
           saveProjectsToDatabase(); // Cập nhật database
-          renderProjectList();
+          // renderProjectList();
         });
 
         // Xử lý nút Delete
@@ -164,11 +195,12 @@ document.addEventListener('DOMContentLoaded', () => {
           button.addEventListener('click', async (e) => {
             const projectIndex = e.target.getAttribute('data-project-index');
             const fileIndex = e.target.getAttribute('data-file-index');
-            const file = Tasks[projectIndex].files[fileIndex];
+            
 
             try {
               
               Tasks[projectIndex].files.splice(fileIndex, 1);
+              saveProjectsToDatabase(); // Cập nhật database
               renderProjectList(); // Cập nhật lại danh sách dự án sau khi xóa file
             } catch (error) {
               alert('Failed to delete file');
