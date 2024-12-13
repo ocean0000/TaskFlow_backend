@@ -18,6 +18,11 @@
   gap :45px;
 }
 
+#dashboard_main h1
+{
+  color : rgb(112, 12, 101);
+}
+
 
 .weather_container
 {
@@ -113,6 +118,39 @@
   transition: 0.5s;
   cursor: pointer;
 }
+
+.event-start-day::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  margin: -12px auto 0;
+}
+
+.event-end-day::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: orange;
+  border-radius: 50%;
+  margin: -12px auto 0;
+}
+
+.event-both-day::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin: -12px auto 0;
+}
+
+
+
 
 .padding-day {
   color: #a5a5a5;

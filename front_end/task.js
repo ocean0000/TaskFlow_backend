@@ -324,7 +324,9 @@ function renderFileItem(file, projectIndex, fileIndex) {
   } else if (file.filetype === 'application/pdf') {
     return `
       <div class="file-item">
-        <div class="file-icon-pdf"></div>
+        <a href="${file.filepath}" target="_blank">
+          <div class="file-icon-pdf"></div>
+        </a>
         <span class="file-name" title="${file.filename}">
           <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (PDF)</a>
         </span>
