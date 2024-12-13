@@ -8,6 +8,49 @@ const nextYearBtn = document.querySelector('.next-year');
 
 let date = new Date();
 
+const event_date= [];
+
+document.addEventListener('DOMContentLoaded',async function() {
+  await getEvents();
+  renderCalendar();
+});
+
+
+
+async function getEvents() {
+  const username = localStorage.getItem('username'); // Lấy username từ localStorage
+
+  try {
+    const response = await fetch('https://back-end-ocean.up.railway.app/project/get', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username }),
+    });
+
+    // Kiểm tra nếu phản hồi không thành công
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    if (data.content) {
+      data.content.Tasks.forEach(task => {
+        const start = new Date(task.startDate);
+        const end = new Date(task.endDate);
+        event_date.push({ start, end });
+      });
+    }
+  } catch (error) {
+    console.error('Error fetching events:', error);
+  }
+}
+
+
+console.log(event_date);
+
 const renderCalendar = () => {
    calendarDaysEl.innerHTML = '';
    const month = date.getMonth();
@@ -26,16 +69,33 @@ const renderCalendar = () => {
      calendarDaysEl.appendChild(paddingDay);
    }
  
-   for (let i = 1; i <= lastDate; i++) {
+   for (let i = 1; i <= lastDate; i++) 
+    {
      const day = document.createElement('div');
      day.classList.add('month-day');
-     if (
-       i === new Date().getDate() &&
-       month === new Date().getMonth() &&
-       year === new Date().getFullYear()
-     ) {
-       day.classList.add('current-day');
+     
+     if (i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) 
+     {
+        day.classList.add('current-day');
      }
+     event_date.forEach((event) => {
+        if (i === event.start.getDate() && month === event.start.getMonth() && year === event.start.getFullYear()) {
+          day.classList.add('event-start-day');
+        }
+        if (i === event.end.getDate() && month === event.end.getMonth() && year === event.end.getFullYear()) {
+          day.classList.add('event-end-day');
+        }
+        if( i === event.start.getDate() && month === event.start.getMonth() && year === event.start.getFullYear() && i === event.end.getDate() && month === event.end.getMonth() && year === event.end.getFullYear())
+        {
+          day.classList.add('event-both-day');
+        }
+
+
+     });
+
+
+      
+   
      day.textContent = i;
      calendarDaysEl.appendChild(day);
    }
@@ -61,4 +121,5 @@ todayBtn.addEventListener('click', () => {
   renderCalendar();
 });
 
-renderCalendar();
+
+

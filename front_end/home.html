@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sidebar Menu HTML and CSS | CodingNepal</title>
+  <title>Task Flow</title>
   <!-- Linking Google Font Link For Icons -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
@@ -95,7 +95,7 @@
           <div class ="news">
             <h1>News</h1>
 
-            <iframe style="border-radius: 1%;" width="800" height="600" src="https://rss.app/embed/v1/wall/bpiemFoRV79TJ7cW" frameborder="0"></iframe>
+            <iframe style="border-radius: 1%;" width="850" height="650" src="https://rss.app/embed/v1/wall/bpiemFoRV79TJ7cW" frameborder="0"></iframe>
           </div>
 
           <div class = calendar_weather style="justify-items: center;"    >
@@ -204,7 +204,7 @@
 
         <!-- tasks -->
         <div id="task_main" style="display: none;">
-          <div>Project Manager</div>
+          <div>Task Manager</div>
           
           
 
@@ -221,8 +221,9 @@
               <label for="progress_filter">Progress:</label>
               <select id="progress_filter" class="progress">
                 <option value="all">All</option>
-                <option value="completed">Completed</option>
-                <option value="uncompleted">Uncompleted</option>
+                <option value="Running">RUNNING</option>
+                <option value="Ended">ENDED</option>
+                <option value ="Comming">COMMING</option>
               </select>
               <label for="level_filter">Priority:</label>
               <select id="level_filter" class="level">
@@ -242,8 +243,7 @@
         <!-- notifications -->
         <div id = "notification_main" style="display: none;">
 
-            <h1>Notifications</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+            
             
         </div>
         

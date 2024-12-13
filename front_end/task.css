@@ -1,5 +1,5 @@
 #task_main {
-   font-family: Arial, sans-serif;
+   font-family: Arial, sans- serif;
    
    padding: 20px;
    border-radius: 8px;
@@ -8,6 +8,7 @@
    margin-left: 85px;
    display: flex;
    flex-direction: column;
+   gap:5px;
  }
  
  /* Title */
@@ -22,9 +23,10 @@
  .task_container {
    display: flex;
    flex-direction: column;
+   border-radius: 2%;
    gap: 20px;
-   width: 400px;
-   
+   width: 450px;
+  
  }
  
  /* Input Task Styling */
@@ -75,69 +77,112 @@
    border-radius: 4px;
    font-size: 14px;
    cursor: pointer;
+   width: 200px;
  }
 
  .project {
   background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  border: 1px solid #f4f0f0;
   border-radius: 8px;
   padding: 16px;
   margin-bottom: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 500px;
+  box-shadow: 0 2px 4px rgba(10, 187, 25, 0.1);
+  width: 300px;
 }
 
-/* Header của dự án */
+.project_list
+{
+  display: flex ;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 1200px;
+}
+
+.project_item {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #e9ecf0;
+  margin-bottom: 10px;
+  height: 650px;
+  width: 500px;
+  
+  border: 5px solid ;
+  transition: border-color 0.3s ease;
+}
+
+.project_item[data-level="high"] {
+  border-color: red;
+}
+
+.project_item[data-level="medium"] {
+  border-color: orange;
+}
+
+.project_item[data-level="low"] {
+  border-color: green;
+} 
+
 .project-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: 5px;
 }
 
-.project-header h2 {
-  font-size: 20px;
-  font-weight: bold;
+.project-name {
   margin: 0;
+  font-size: 1.2em;
   color: #333;
 }
 
-.project-header p {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
+.project-controls {
+  display: flex;
+  align-items: center;
 }
 
-.project-header select {
-  padding: 4px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  border-color: #007bff;
-  border-width: 2px;
-  width: 120px;
-  font-size: 12px;
+.project-details {
+  display: flex;
   
-  margin-left: 30px;
+}
+
+
+
+.project-details select {
+  padding: 5px;
+  border-radius: 20px;
+  border: 1px solid #23144f;
+  width: 85px;
+}
+
+.project-dates {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.project-dates label {
+  margin-right: 5px;
 }
 
 .delete-button {
-  background-color: #ff4d4f;
-  color: white;
+  background: none;
   border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
+  color: #ff4d4d;
+  font-size: 1.2em;
   cursor: pointer;
-  margin-left: auto;
-  font-size: 14px;
+  margin-left: 10px;
 }
 
 .delete-button:hover {
-  background-color: #d9363e;
+  color: #ff1a1a;
 }
 
 /* Ghi chú dự án */
 .project-note {
+  margin-top: 10px;
   margin-bottom: 12px;
 }
 
@@ -150,7 +195,7 @@
 
 .note-input {
   width: 100%;
-  height: 80px;
+  height: 150px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -158,9 +203,19 @@
   resize: none;
 }
 
+
+
+.project-details select {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
 /* Phần tải tệp */
 .project-upload {
+  margin-top: 10px;
   margin-bottom: 8px;
+  overflow-y: auto;
 }
 
 .project-upload input {
@@ -171,14 +226,14 @@
   width: 100px;
 }
 
-
-
 .file-upload-wrapper {
+  display: flex;
+  align-items: center;
   position: relative;
-  display: inline-block;
 }
 
 .file-upload {
+  margin-right: 10px;
   opacity: 0; /* Ẩn input mặc định */
   position: absolute;
   left: 0;
@@ -186,6 +241,22 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3; /* Light grey */
+  border-top: 4px solid #1f24c7; /* Blue */
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  animation: spin 2s linear infinite;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .custom-file-label {
@@ -210,6 +281,135 @@
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.file-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.file-item {
+  text-align: center;
+  font-size: 14px;
+}
+
+.file-thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+  margin-right: 10px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.file-video {
+  max-width: 200px;
+  max-height: 150px;
+  margin-right: 10px;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.file-icon {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 24px;
+  color: #666;
+  background-color: #f9f9f9;
+  margin-bottom: 8px;
+}
+
+/* Biểu tượng PDF cơ bản */
+.file-icon-pdf {
+  display: inline-block;
+  width: 100px; /* Kích thước rộng */
+  height: 100px; /* Kích thước cao */
+  background-color: #d32f2f; /* Màu nền đỏ đặc trưng của PDF */
+  border-radius: 4px; /* Góc bo tròn nhẹ */
+  position: relative;
+  text-align: center;
+  color: white; /* Màu chữ */
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 40px; /* Canh chữ giữa */
+}
+
+/* Chữ "PDF" trên biểu tượng */
+.file-icon-pdf::after {
+  content: "PDF"; /* Nội dung chữ */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.file-icon.unknown {
+  background-color: #999;
+  color: white;
+}
+
+.file-icon.other {
+  background-color: #007bff;
+  color: white;
+}
+
+.file-name {
+  display: inline-block;
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-name a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.file-name a:hover {
+  text-decoration: underline;
+}
+
+.file-link {
+  display: block;
+  margin-top: 5px;
+}
+
+.save-button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #45a049;
+}
 
 .save-button {
   background-color: #126615;
@@ -224,7 +424,12 @@
   display: block;
 }
 
-
 .save-button:hover {
   background-color: #209626;
+}
+
+.file-pdf {
+  width: 100%;
+  height: 500px;
+  border: none;
 }
