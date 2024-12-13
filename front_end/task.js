@@ -4,14 +4,11 @@ const taskMain = document.getElementById('task_main');
 const projectNameInput = document.getElementById('project_name');
 const addProjectButton = document.getElementById('add_project_button');
 const projectList = document.querySelector('.project_list');
+const progressFilter = document.getElementById('progress_filter');
+const levelFilter = document.getElementById('level_filter');
 
 document.addEventListener('DOMContentLoaded', () => {
   // Lấy các phần tử HTML
-  const projectNameInput = document.getElementById('project_name');
-  const addProjectButton = document.getElementById('add_project_button');
-  const projectList = document.querySelector('.project_list');
-  const progressFilter = document.getElementById('progress_filter');
-  const levelFilter = document.getElementById('level_filter');
 
   // Tạo một mảng để lưu trữ các dự án
   let Tasks = [];
@@ -166,6 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
           saveProjectsToDatabase(); // Cập nhật database
         });
 
+        // Xử lý sự kiện thay đổi level
         projectItem.querySelector('.level-select').addEventListener('change', (e) => {
           project.level = e.target.value;
           saveProjectsToDatabase(); // Cập nhật database
