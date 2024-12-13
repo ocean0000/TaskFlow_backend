@@ -40,9 +40,9 @@ function updateFlashcard() {
     document.getElementById("back-text").innerHTML =
       flashcards[currentCardIndex].back;
     document.getElementById("card-number").innerHTML =
-      currentCardIndex + 1 + ".";
+      currentCardIndex + 1 + "  ";
     document.getElementById("card-number-back").innerHTML =
-      currentCardIndex + 1 + ".";
+      currentCardIndex + 1 + "  ";
   } else {
     document.getElementById("front-text").innerHTML = "Không có từ vựng nào!";
     document.getElementById("back-text").innerHTML = "";
