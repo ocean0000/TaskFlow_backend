@@ -13,6 +13,7 @@
   <link rel ="stylesheet" href="video.css"/>
   <link rel ="stylesheet" href="dashboard.css"/>
   <link rel ="stylesheet" href="task.css"/>
+    <link rel ="stylesheet" href="extension.css"/>
 </head>
 
 <body id ="body">
@@ -196,6 +197,7 @@
         <div id = "overview_main" style="display: none;">
             <h1>Overview</h1>
             <p> Here you can view your recent activity and notifications. </p>
+            
 
         </div>
 
@@ -248,10 +250,84 @@
 
 
         <!-- extension -->
-        <div id = "extension_main" style="display: none;">
-            <h1>Films</h1>
-            <p> Here you can view your recent activity and notifications. </p>
+       <div id="extension_main">
+        <div id="flashcard_box">
+    <!-- Tiêu đề chính -->
+    <h4>Tạo Flashcard</h4>
+   
+
+    <!-- Phần Flashcard -->
+    <div class="flashcard-container">
+      <div class="flashcard" id="flashcard">
+        <div class="front">
+          <p id="card-number"></p>
+          <h2 id="front-text">Hello</h2>
         </div>
+        <div class="back">
+          <p id="card-number-back"></p>
+          <h2 id="back-text">Xin chào</h2>
+        </div>
+      </div>
+      <div class="flashcard-buttons">
+        <button id="flip-button">Đáp án</button>
+        <button id="next-button">Tiếp theo</button>
+        <button id="previous-button">Quay lại</button>
+        <button id="add-button">Thêm từ vựng</button>
+        <button id="delete-button">Xóa Từ Vựng</button>
+      </div>
+    </div>
+
+    <!-- Form thêm từ vựng -->
+    <div class="add-form" id="add-form">
+      <h2>Thêm từ vựng</h2>
+      <input type="text" id="front-input" placeholder="Từ vựng">
+      <input type="text" id="back-input" placeholder="Nghĩa của từ vựng">
+      <div class="form-buttons">
+        <button id="save-button">Lưu</button>
+        <button id="cancel-button">Hủy</button>
+      </div>
+    </div>
+</div>
+    <!-- Phần Quiz -->
+    <div class="quiz-display">
+      <h1 id="question-text">Câu hỏi sẽ hiển thị ở đây</h1>
+      <div class="answers">
+        <button id="answer-A-button">A</button>
+        <button id="answer-B-button">B</button>
+        <button id="answer-C-button">C</button>
+        <button id="answer-D-button">D</button>
+      </div>
+      <p id="result-text"></p>
+      <div class="quiz-buttons">
+        <button id="prev-question-button">Câu trước</button>
+        <button id="next-question-button">Câu tiếp theo</button>
+        <button id="delete-question-button">Xóa câu hỏi</button>
+      </div>
+    </div>
+
+    <!-- Form thêm câu hỏi -->
+    <div id="quiz_box">
+    <div class="quiz-form">
+      
+      <h2>Thêm câu hỏi</h2>
+      <input type="text" id="question-input" placeholder="Nhập câu hỏi">
+      <input type="text" id="answer-A-input" placeholder="Đáp án A">
+      <input type="text" id="answer-B-input" placeholder="Đáp án B">
+      <input type="text" id="answer-C-input" placeholder="Đáp án C">
+      <input type="text" id="answer-D-input" placeholder="Đáp án D">
+      <select id="correct-answer-input">
+        <option value="">Chọn đáp án đúng</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+        <option value="C">C</option>
+        <option value="D">D</option>
+      </select>
+      <button id="save-question-button">Lưu câu hỏi</button>
+    </div>
+    </div>
+  </div>
+
+
 
 
         <!-- video -->
@@ -352,14 +428,6 @@
 
         </div>
         
-        
-        
-
-
-
-
-
-
         </div>
 
 
@@ -368,9 +436,8 @@
             <h1>Settings</h1>
             <p> Here you can view your recent activity and notifications. </p>
             
+            
         </div>
-
-
 
     </div>  
         
@@ -381,5 +448,6 @@
 <script src ="profile.js"></script>
 <script src ="video.js"></script>
 <script src ="task.js"></script>
+<script src ="extension.js"></script>
 
 </html>
