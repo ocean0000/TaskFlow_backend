@@ -8,12 +8,23 @@ document.getElementById('uploadButton').addEventListener('click', function() {
 document.getElementById('profileInput').addEventListener('change', function(event) {
    const file = event.target.files[0];
    if (file && file.type.startsWith('image/') ) {
-       const reader = new FileReader();
-       reader.onload = function(e) {
-           document.getElementById('profileImage').src = e.target.result;
-       }
-       
-       reader.readAsDataURL(file);
+       const formData = new FormData();
+         formData.append('profile_image', file);
+         formData.append('username', username);
+         formData.append('folder', 'profile');
+            fetch('https://back-end-ocean.up.railway.app/user/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result) {
+                    document.getElementById('profileImage').src = `${result.profile_image}`;
+                } else {
+                    alert('Error uploading profile image');
+                }
+            })
+            
    }
 });
 
@@ -25,7 +36,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const password = document.getElementById('new_password').value;
     const profileImageInput = document.getElementById('profileInput');
     const description = document.getElementById('description').value;
-    const profileImage = profileImageInput.files[0];
+    const profileImage = profileImageInput;
 
     const formData = new FormData();
     
@@ -60,7 +71,7 @@ document.getElementById('profileForm').addEventListener('submit', function(event
              document.getElementById('name').innerText = name;
          }
          if (result.profileImage) {
-             document.getElementById('profileImage').src = `data:image/png;base64,${result.user.profile_image}`;
+             document.getElementById('profileImage').src = `${result.user.profile_image}`;
          }
       } 
       else {

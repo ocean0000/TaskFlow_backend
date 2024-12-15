@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
                    document.getElementById('description').value = result.description;
              }
                if (result.profile_image) {
-                  document.getElementById('profileImage').src = `data:image/png;base64,${result.profile_image}`;
+                  document.getElementById('profileImage').src = `${result.profile_image}`;
               }
               else
               {
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
                console.error('Error:', error);
                alert("Error connection");
             });
-            buttonIds.forEach(function(buttonId) {
+    buttonIds.forEach(function(buttonId) {
                 const button = document.getElementById(buttonId + '_button');
                 button.addEventListener('click', function() {
                     const now = Date.now();
