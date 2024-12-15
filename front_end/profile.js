@@ -12,7 +12,7 @@ document.getElementById('profileInput').addEventListener('change', function(even
          formData.append('profile_image', file);
          formData.append('username', username);
          formData.append('folder', 'profile');
-            fetch('https://back-end-ocean.up.railway.app/user/upload', {
+            fetch('https://back-end-ocean.up.railway.app/storage/upload', {
                 method: 'POST',
                 body: formData
             })
@@ -24,7 +24,7 @@ document.getElementById('profileInput').addEventListener('change', function(even
                     alert('Error uploading profile image');
                 }
             })
-            
+
    }
 });
 
