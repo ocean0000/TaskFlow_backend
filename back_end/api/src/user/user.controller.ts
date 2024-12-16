@@ -27,16 +27,8 @@ export class UserController {
   }
 
   @Post('update')
-  @UseInterceptors(FileInterceptor('profile_image'))
-  async update(
-    @Body('username') username: string,
-    @Body('name') name: string,
-    @Body('password') password: string,
-    @Body('description') description: string,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    const profile_image = file ? file.buffer.toString('base64') : null;
-    const user = { username, name, password, description, profile_image, email: '' };
+  async update( @Body() user: User  ) {
+    
      
     return this.userService.update(user);
   }

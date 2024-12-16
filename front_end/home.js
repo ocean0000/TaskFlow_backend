@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(result => {
                
                document.getElementById('name').innerText =  result.name;
-               
+               console.log(result)
                if(result.description)
                {
 
