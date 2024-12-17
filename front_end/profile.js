@@ -37,41 +37,42 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const password = document.getElementById('new_password').value;
     const profileImage = document.getElementById('profileImage').src;
     const description = document.getElementById('description').value;
+
+    if(name === '')
+    {
+        return;
+    }
     document.getElementById('name').innerText = name;
     
+
+
     const new_profile = {}; 
     new_profile.name = name;
     new_profile.password = password;
     new_profile.profile_image = profileImage;
     new_profile.description = description;
-
+    new_profile.username = localStorage.getItem('username');
 
     
-    
-
     fetch('https://back-end-ocean.up.railway.app/user/update', {
         method: 'POST',
-        body: JSON.stringify(new_profile),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(new_profile)
     })
-    
+    .then(response => response.json())
     .then(result => {
-         if(result.ok)
-         {
-            console.log('ok');
-         }
-      if (result) {
-         alert('Profile updated successfully');
-            console.log(result);
-        
-      } 
-      else {
-         alert('Error updating profile');
-      }
-       
+        if(result)
+        {
+            alert('Update successfully');
+        }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('Error connection');
     });
+
+   
 });
 

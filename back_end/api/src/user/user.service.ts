@@ -69,7 +69,7 @@ export class UserService {
       if (!existingUser) {
          return ;
       }
-      const  newuser=   await this.userscollection.findOneAndUpdate({ username:username }, user, { new: true, lean: true });
+      const  newuser=   await this.userscollection.findOneAndUpdate({ username:username }, user, { new: true });
       
       return newuser;
 
