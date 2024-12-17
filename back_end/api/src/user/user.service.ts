@@ -70,7 +70,7 @@ export class UserService {
          return ;
       }
       const  newuser=   await this.userscollection.findOneAndUpdate({ username:username }, user, { new: true });
-      console.log(newuser);
+      
       return newuser;
 
 

@@ -49,7 +49,7 @@ async function getEvents() {
 }
 
 
-console.log(event_date);
+
 
 const renderCalendar = () => {
    calendarDaysEl.innerHTML = '';

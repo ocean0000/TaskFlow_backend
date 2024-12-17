@@ -37,44 +37,32 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     const password = document.getElementById('new_password').value;
     const profileImage = document.getElementById('profileImage').src;
     const description = document.getElementById('description').value;
+    document.getElementById('name').innerText = name;
     
-    
-    const formData = new FormData();
-    
-    if (name ) {
-        formData.append('name', name);
-    }
-    if(password )
-    {
-        formData.append('password', password);
-    }
-    if(description)
-    {
-        formData.append('description', description);
-    }
-    formData.append('username', username);
+    const new_profile = {}; 
+    new_profile.name = name;
+    new_profile.password = password;
+    new_profile.profile_image = profileImage;
+    new_profile.description = description;
 
-    console.log(profileImage);
-    if (profileImage) {
-        formData.append('profile_image', profileImage);
-    }
+
+    
+    
 
     fetch('https://back-end-ocean.up.railway.app/user/update', {
         method: 'POST',
-        body: formData
+        body: JSON.stringify(new_profile),
     })
-    .then(response => response.json())
+    
     .then(result => {
-         
+         if(result.ok)
+         {
+            console.log('ok');
+         }
       if (result) {
          alert('Profile updated successfully');
-         
-         if (name) {
-             document.getElementById('name').innerText = name;
-         }
-         if (result.profileImage) {
-             document.getElementById('profileImage').src = `${result.user.profile_image}`;
-         }
+            console.log(result);
+        
       } 
       else {
          alert('Error updating profile');

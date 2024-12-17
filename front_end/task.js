@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Lắng nghe sự kiện thay đổi bộ lọc
   progressFilter.addEventListener('change', renderProjectList);
   levelFilter.addEventListener('change', renderProjectList);
-  console.log(Tasks)
+  
 
   function showLoadingSpinner(spinnerElement) {
     spinnerElement.style.display = 'inline-block';
@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        
         if (data.content) {
           Tasks = data.content.Tasks;
           renderProjectList();

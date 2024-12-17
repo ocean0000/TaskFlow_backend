@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async function()
         renderPlaylists();
     });
 
-    console.log(timeSpent["video"], timeSpent.total.toFixed(2));
+   
 
    
 }

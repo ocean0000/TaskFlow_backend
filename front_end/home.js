@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(result => {
                
                document.getElementById('name').innerText =  result.name;
-               console.log(result)
+               
                if(result.description)
                {
 
@@ -63,8 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         const elapsedTime = (now - startTime) / 1000; // Thời gian bằng giây
                         timeSpent[currentButtonId] += elapsedTime;
                         timeSpent.total += elapsedTime;
-                        console.log(`Time spent on ${currentButtonId}: ${timeSpent[currentButtonId]} seconds`);
-                        console.log(`Total time spent: ${timeSpent.total.toFixed(2)} seconds`);
+                        
                     }
             
                     // Cập nhật mục hiện tại và thời gian bắt đầu
