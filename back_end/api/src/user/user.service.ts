@@ -65,12 +65,12 @@ export class UserService {
    async update(user: User) {
       const username = user.username;
       
-      const existingUser = await this.userscollection.findOne({ username: user.username });
+      const existingUser = await this.userscollection.findOne({ username: username });
       if (!existingUser) {
          return ;
       }
-      const  newuser=   await this.userscollection.findOneAndUpdate({ username:user.username }, user, { new: true });
-      
+      const  newuser=   await this.userscollection.findOneAndUpdate({ username:username }, user, { new: true });
+      console.log(newuser);
       return newuser;
 
 
