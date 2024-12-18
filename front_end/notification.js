@@ -1,7 +1,8 @@
-
+    const notificationList= document.querySelector(".notification_list")
+    const notificationDoneBox= document.querySelector(".notification_done_list")
 
 // Hàm định dạng ngày thành dd/mm/yyyy
-function formatDate(dateString) {
+function DateForNotification(dateString) {
     const date = new Date(dateString);
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
 }
@@ -19,12 +20,14 @@ function filterEvents() {
     const timeFilter = document.getElementById("time").value;
     const selectedDate = new Date(dateInput);
 
-
-    const results = [];
-    console.log(event_date);
-    event_date.forEach(event => {
-        const eventStart = new Date(event.start);
-        const eventEnd = new Date(event.end);
+    
+    notificationDoneBox.innerHTML = "";
+    notificationList.innerHTML = "";
+    
+    
+    Tasks.forEach((event,index) => {
+        const eventStart = new Date(event.startDate);
+        const eventEnd = new Date(event.endDate);
         
         // Kiểm tra cho tuần, tháng, năm
         if (timeFilter === "week") {
@@ -32,58 +35,57 @@ function filterEvents() {
             const selectedWeek = getWeekNumber(selectedDate);
             
             if (selectedWeek === getWeekNumber(eventStart)) {
-                results.push({ name: event.name, level: event.level, date: event.start, status: "Bắt đầu" });
+                displayNotifications(event.name,"Bắt đầu",event.level,eventStart,event.completed_start,index);
             }
             if (selectedWeek === getWeekNumber(eventEnd)) {
-                results.push({ name: event.name, level: event.level, date: event.end, status: "Kết thúc" });
+                displayNotifications(event.name,"Kết thúc",event.level,eventEnd,event.completed_end,index);
             }
         }
         else if (timeFilter === "month") {
             if (selectedDate.getFullYear() === eventStart.getFullYear() && selectedDate.getMonth() === eventStart.getMonth()) {
-                results.push({ name: event.name, level: event.level, date: event.start, status: "Bắt đầu" });
+                displayNotifications(event.name,"Bắt đầu",event.level,eventStart,event.completed_start,index);
             }
             if (selectedDate.getFullYear() === eventEnd.getFullYear() && selectedDate.getMonth() === eventEnd.getMonth()) {
-                results.push({ name: event.name, level: event.level, date: event.end, status: "Kết thúc" });
+                displayNotifications(event.name,"Kết thúc",event.level,eventEnd,event.completed_end,index);
             }
         }
         else if (timeFilter === "year") {
             if (selectedDate.getFullYear() === eventStart.getFullYear()) {
-                results.push({ name: event.name, level: event.level, date: event.start, status: "Bắt đầu" });
+                displayNotifications(event.name,"Bắt đầu",event.level,eventStart,event.completed_start,index);
             }
             if (selectedDate.getFullYear() === eventEnd.getFullYear()) {
-                results.push({ name: event.name, level: event.level, date: event.end, status: "Kết thúc" });
+                displayNotifications(event.name,"Kết thúc",event.level,eventEnd,event.completed_end,index);
             }
         }
         else if (timeFilter === "all_time") {
-            results.push({ name: event.name, level: event.level, date: event.start, status: "Bắt đầu" });
-            results.push({ name: event.name, level: event.level, date: event.end, status: "Kết thúc" });
-        }
-        else 
-        {
+            displayNotifications(event.name,"Bắt đầu",event.level,eventStart,event.completed_start,index);
+            displayNotifications(event.name,"Kết thúc",event.level,eventEnd,event.completed_end,index);
             
         }
+        
 
 
     });
-    console.log(results);
-    displayNotifications(results);
+
+
+    
 }
 
 // Hiển thị các thông báo
-function displayNotifications(events) {
-    const notificationList = document.querySelector(".notification_list");
-    notificationList.innerHTML = "";
+function displayNotifications(name,status,level,date,completed,index) {
+   
+    
 
-    events.forEach(event => {
         const notification = document.createElement("div");
         notification.classList.add("notification");
-        notification.classList.add(`${event.level}`) // Thêm class cho notification
+        notification.classList.add(`${level}`) // Thêm class cho notification
 
-
+        
+        date = new Date(date);
         const eventHTML = `
            <p>
-               <strong>Sự kiện:</strong> ${event.name} <br>
-               <strong>${event.status} vào ngày:</strong> ${formatDate(event.date)}
+               <strong>Sự kiện:</strong> ${name} <br>
+               <strong>${status} vào ngày:</strong> ${DateForNotification(date)}
            </p>
        `;
         notification.innerHTML = eventHTML;
@@ -92,24 +94,90 @@ function displayNotifications(events) {
         const checkbox = document.createElement("input");
         checkbox.type = "checkbox";
         checkbox.classList.add("markdone");
-
+        
         checkbox.addEventListener("change", (e) => {
             if (e.target.checked) {
                 notification.style.opacity = "0.6";
-            } else {
+                notificationDoneBox.insertBefore(notification, notificationDoneBox.firstChild); // Thêm vào đầu danh sách
+                if (status === "Bắt đầu") {
+                    Tasks[index].completed_start = true;
+                }
+                else {
+                    Tasks[index].completed_end = true;
+                }
+                saveProjectsToDatabase();
+                
+                
+            } 
+            else {
                 notification.style.opacity = "1";
+                notificationList.appendChild(notification);
+                if (status === "Bắt đầu") {
+                    Tasks[index].completed_start = false;
+                }
+                else {
+                    Tasks[index].completed_end = false;
+                }
+                saveProjectsToDatabase();
             }
         });
-
         notification.appendChild(checkbox);
+        
+        if (completed) {
+            checkbox.checked = true;
+            notification.style.opacity = "0.6";
+            notificationDoneBox.insertBefore(notification, notificationDoneBox.firstChild); // Thêm vào đầu danh sách
+            return;
+        }
+
+        
+
         notificationList.appendChild(notification);
+    
+}
+
+function scheduleNotifications() {
+    const notifyDays = parseInt(document.getElementById("notify_days").value, 10);
+    const notifyTime = document.getElementById("notify_time").value;
+    const [notifyHour, notifyMinute] = notifyTime.split(":").map(Number);
+    const now = new Date();
+
+    Tasks.forEach((event) => {
+        const eventStart = new Date(event.startDate);
+        const eventEnd = new Date(event.endDate);
+
+        // Tính toán thời gian thông báo
+        const notificationTimeStart = new Date(eventStart);
+        notificationTimeStart.setDate(notificationTimeStart.getDate() - notifyDays);
+        notificationTimeStart.setHours(notifyHour, notifyMinute, 0);
+
+        const notificationTimeEnd = new Date(eventEnd);
+        notificationTimeEnd.setDate(notificationTimeEnd.getDate() - notifyDays);
+        notificationTimeEnd.setHours(notifyHour, notifyMinute, 0);
+
+        // Hiển thị thông báo nếu thời gian thỏa mãn điều kiện
+        if (notificationTimeStart > now && notificationTimeStart <= now) {
+            showToast(`${event.name} sẽ bắt đầu vào ${DateForNotification(eventStart)}`);
+        }
+        
+        if (notificationTimeEnd > now && notificationTimeEnd <= now) {
+            showToast(`${event.name} sẽ kết thúc vào ${DateForNotification(eventEnd)}`);
+        }
     });
 }
+
+document.getElementById("save_notification_settings").addEventListener("click", () => {
+    const notifyDays = document.getElementById("notify_days").value;
+    const notifyTime = document.getElementById("notify_time").value;
+    localStorage.setItem("notify_days", notifyDays);
+    localStorage.setItem("notify_time", notifyTime);
+    showToast(`Đã lưu cài đặt thông báo: trước ${notifyDays} ngày vào ${notifyTime}`);
+});
 
 // Gắn sự kiện cho nút Filter
 document.addEventListener("DOMContentLoaded", async() => {
 
-    await getEvents();
+    
     document.getElementById("filter_button").addEventListener("click", filterEvents);
     // Set today's date
     const dateInput = document.getElementById('date');
@@ -120,9 +188,16 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     document.getElementById('time').value = 'week';
 
+
+    await getProjectsFromDatabase();
+
     // Click the filter button
     filterEvents();
 
+    document.getElementById("notify_days").value = localStorage.getItem("notify_days") || 1;
+    document.getElementById("notify_time").value = "08:00";
 
+    // Schedule notifications
+    setInterval(scheduleNotifications, 60000); // 1 phút
 
 });

@@ -8,48 +8,19 @@ const nextYearBtn = document.querySelector('.next-year');
 
 let date = new Date();
 
-let event_date = [];
+
 
 document.addEventListener('DOMContentLoaded', async function () {
-  await getEvents();
+  
+  await getProjectsFromDatabase();
+
   renderCalendar();
+
+
 });
 
 
 
-async function getEvents() {
-  const username = localStorage.getItem('username'); // Lấy username từ localStorage
-
-  try {
-    const response = await fetch('https://back-end-ocean.up.railway.app/project/get', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ username }),
-    });
-
-    // Kiểm tra nếu phản hồi không thành công
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-
-    if (data.content) {
-      event_date = [];
-      data.content.Tasks.forEach(task => {
-
-        const start = new Date(task.startDate);
-        const end = new Date(task.endDate);
-        event_date.push({ start, end, name: task.name, level: task.level });
-      });
-
-    }
-  } catch (error) {
-    console.error('Error fetching events:', error);
-  }
-}
 
 
 
@@ -79,8 +50,12 @@ const renderCalendar = () => {
     if (i === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
       day.classList.add('current-day');
     }
-    event_date.forEach((event) => {
-      if (i === event.start.getDate() && month === event.start.getMonth() && year === event.start.getFullYear()) {
+    Tasks.forEach((event) => {
+
+     const startDate = new Date(event.startDate);
+      const endDate = new Date(event.endDate);
+
+      if (i === startDate.getDate() && month === startDate.getMonth() && year === startDate.getFullYear()) {
         day.classList.add('event-start-day');
 
         day.addEventListener('click', () => {
@@ -93,7 +68,7 @@ const renderCalendar = () => {
         });
 
       }
-      if (i === event.end.getDate() && month === event.end.getMonth() && year === event.end.getFullYear()) {
+      if (i === endDate.getDate() && month === endDate.getMonth() && year === endDate.getFullYear()) {
         day.classList.add('event-end-day');
 
         day.addEventListener('click', () => {
@@ -106,7 +81,7 @@ const renderCalendar = () => {
         });
 
       }
-      if (i === event.start.getDate() && month === event.start.getMonth() && year === event.start.getFullYear() && i === event.end.getDate() && month === event.end.getMonth() && year === event.end.getFullYear()) {
+      if (i === startDate.getDate() && month === startDate.getMonth() && year === startDate.getFullYear() && i === endDate.getDate() && month === endDate.getMonth() && year === endDate.getFullYear()) {
         day.classList.add('event-both-day');
 
         day.addEventListener('click', () => {

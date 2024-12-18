@@ -156,37 +156,41 @@ function log_out() {
 
 //message bar
 const toast = document.querySelector(".toast"),
-closeIcon = document.querySelector(".close"),
-progress = document.querySelector(".progress"),
-text2 = document.querySelector(".text-2");
+    closeIcon = document.querySelector(".close"),
+    progress = document.querySelector(".progress"),
+    text2 = document.querySelector(".text-2");
+    let timer1, timer2;
 
-let timer1, timer2;
 
 // Hàm hiển thị thông báo với tham số message
 function showToast(message) {
-text2.textContent = message; // Gán nội dung thông báo vào text-2
-toast.classList.add("active");
-progress.classList.add("active");
+    text2.textContent = message; // Gán nội dung thông báo vào text-2
 
-timer1 = setTimeout(() => {
-  toast.classList.remove("active");
-}, 5000); // 5s = 5000 milliseconds
+    
 
-timer2 = setTimeout(() => {
-  progress.classList.remove("active");
-}, 5300);
+
+    toast.classList.add("active");
+    progress.classList.add("active");
+
+    timer1 = setTimeout(() => {
+        toast.classList.remove("active");
+    }, 5000); // 5s = 5000 milliseconds
+
+    timer2 = setTimeout(() => {
+        progress.classList.remove("active");
+    }, 5300);
 }
 
 // Khi người dùng bấm vào biểu tượng đóng, ẩn thông báo
 closeIcon.addEventListener("click", () => {
-toast.classList.remove("active");
+    toast.classList.remove("active");
 
-setTimeout(() => {
-  progress.classList.remove("active");
-}, 300);
+    setTimeout(() => {
+        progress.classList.remove("active");
+    }, 300);
 
-clearTimeout(timer1);
-clearTimeout(timer2);
+    clearTimeout(timer1);
+    clearTimeout(timer2);
 });
 
 

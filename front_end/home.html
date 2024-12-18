@@ -96,18 +96,18 @@
 
     <!-- message  bar -->
     <div class="toast ">
-  
+
       <div class="toast-content">
         <i class="fas fa-solid fa-check check"></i>
-    
+
         <div class="message">
           <span class="text text-1">Success</span>
           <span class="text text-2">Đăng nhập thành công </span>
         </div>
       </div>
       <i class="fa-solid fa-xmark close"></i>
-    
-     
+
+
       <div class="progress "></div>
     </div>
 
@@ -251,24 +251,61 @@
 
     <!-- notifications -->
     <div id="notification_main" style="display: flex; ">
-      <div id="notification_box">
-        <!-- Bộ lọc ngày và thời gian -->
-        <div class="input_notification">
-          <input type="date" id="date" name="date">
-          <select id="time" name="time">
-            <option value="week">Week</option>
-            <option value="month">Month</option>
-            <option value="year">Year</option>
-            <option value="all_time">All Time</option>
-          </select>
-          <button id="filter_button">Filter</button>
+      <div class="left_notification">
+
+
+        <div id="notification_box">
+          <!-- Bộ lọc ngày và thời gian -->
+          <div class="input_notification">
+            <input type="date" id="date" name="date">
+            <select id="time" name="time">
+              <option value="week">Week</option>
+              <option value="month">Month</option>
+              <option value="year">Year</option>
+              <option value="all_time">All Time</option>
+            </select>
+            <button id="filter_button">Filter</button>
+
+          </div>
 
         </div>
+        
+        <!-- Container thông báo -->
+        <div class="notification_container">
+          <div class="notification_list"></div>
+        </div>
       </div>
-      <!-- Container thông báo -->
-      <div class="notification_container">
-        <div class="notification_list"></div>
-      </div>
+
+      <div id="notification_done_box" class="notification-box">
+        <h3>Mark Done Notifications</h3>
+        <!-- Container thông báo đã hoàn thành -->
+        
+          <div class="notification_done_list"></div>
+
+          
+          
+        </div>
+
+        <div class="notification_config">
+          <h3>Cài đặt thông báo</h3>
+          
+          <div class="config_item">
+            <label for="notify_days">Nhận thông báo trước:</label>
+            <select id="notify_days">
+              <option value="1">1 ngày</option>
+              <option value="2">2 ngày</option>
+              <option value="5">5 ngày</option>
+            </select>
+          </div>
+        
+          <div class="config_item">
+            <label for="notify_time">Giờ thông báo:</label>
+            <input type="time" id="notify_time" value="08:00">
+          </div>
+        
+          <button id="save_notification_settings">Lưu cài đặt</button>
+        </div>
+        
 
     </div>
 

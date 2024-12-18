@@ -1,18 +1,30 @@
 let Tasks =  [];
 
+// Lấy các phần tử HTML
 const taskMain = document.getElementById('task_main');
 const projectNameInput = document.getElementById('project_name');
 const addProjectButton = document.getElementById('add_project_button');
 const projectList = document.querySelector('.project_list');
 const progressFilter = document.getElementById('progress_filter');
 const levelFilter = document.getElementById('level_filter');
-
 document.addEventListener('DOMContentLoaded', async() => {
-  // Lấy các phần tử HTML
-
   
 
-  await getProjectsFromDatabase(); // Lấy dữ liệu từ database
+  
+  
+  await getProjectsFromDatabase() // Lấy dữ liệu từ database
+  
+  renderProjectList(); // Hiển thị danh sách dự án
+ 
+  
+  // Lắng nghe sự kiện click nút Add Project
+  addProjectButton.addEventListener('click', addProject);
+  
+  // Lắng nghe sự kiện thay đổi bộ lọc
+  progressFilter.addEventListener('change', renderProjectList);
+  levelFilter.addEventListener('change', renderProjectList);
+  
+});
   
 
   // Hàm định dạng ngày thành YYYY-MM-DD
@@ -47,14 +59,6 @@ document.addEventListener('DOMContentLoaded', async() => {
     }
   }
 
-  // Lắng nghe sự kiện click nút Add Project
-  addProjectButton.addEventListener('click', addProject);
-
-  // Lắng nghe sự kiện thay đổi bộ lọc
-  progressFilter.addEventListener('change', renderProjectList);
-  levelFilter.addEventListener('change', renderProjectList);
-  
-
   function showLoadingSpinner(spinnerElement) {
     spinnerElement.style.display = 'inline-block';
   }
@@ -70,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async() => {
     const levelValue = levelFilter.value;
     const currentDate = new Date();
     projectList.innerHTML = '';
+    
     Tasks.forEach((project, projectIndex) => {
       const projectStartDate = new Date(project.startDate);
       const projectEndDate = new Date(project.endDate);
@@ -242,25 +247,15 @@ document.addEventListener('DOMContentLoaded', async() => {
   async function getProjectsFromDatabase() {
     const username = localStorage.getItem('username'); // Lấy username từ localStorage
 
-    fetch('https://back-end-ocean.up.railway.app/project/get', { 
+    const response = await fetch('https://back-end-ocean.up.railway.app/project/get', { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ username }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        
-        if (data.content) {
-          Tasks = data.content.Tasks;
-          
-          renderProjectList();
-        }
-      })
-      .catch(error => {
-        console.error('Failed to get projects:', error);
-      });
+    });
+    const data = await response.json();
+    Tasks = data.content.Tasks || [];
   }
 
   // Hàm lưu dự án vào database
@@ -284,68 +279,67 @@ document.addEventListener('DOMContentLoaded', async() => {
         console.error('Failed to save Tasks:', error);
       });
   }
-});
-
-function truncateFilename(filename, maxLength = 10) {
-  if (filename.length > maxLength) {
-    return filename.substring(0, maxLength) + '...';
+  function truncateFilename(filename, maxLength = 8) {
+    if (filename.length > maxLength) {
+      return filename.substring(0, maxLength) + '...';
+    }
+    return filename;
   }
-  return filename;
-}
-
-function renderFileItem(file, projectIndex, fileIndex) {
-  if (!file || !file.filetype) {
-    return `
-      <div class="file-item">
-        <div class="file-icon unknown"></div>
-        <span class="file-name" title="${file.name || 'Unknown file'}">
-          <a href="${file.filepath || '#'}" target="_blank">${truncateFilename(file.name || 'Unknown file')}</a>
-        </span>
-        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
-      </div>`;
+  
+  function renderFileItem(file, projectIndex, fileIndex) {
+    if (!file || !file.filetype) {
+      return `
+        <div class="file-item">
+          <div class="file-icon unknown"></div>
+          <span class="file-name" title="${file.name || 'Unknown file'}">
+            <a href="${file.filepath || '#'}" target="_blank">${truncateFilename(file.name || 'Unknown file')}</a>
+          </span>
+          <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+        </div>`;
+    }
+  
+    if (file.filetype.startsWith('image/')) {
+      return `
+        <div class="file-item">
+          <a href="${file.filepath}" target="_blank">
+            <img src="${file.filepath}" alt="${file.filename}" class="file-thumbnail" title="${file.filename}" />
+          </a>
+          <span class="file-name" title="${file.filename}">
+            <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
+          </span>
+          <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+        </div>`;
+    } else if (file.filetype.startsWith('video/')) {
+      return `
+        <div class="file-item">
+          <a href="${file.filepath}" target="_blank">
+            <video controls src="${file.filepath}" title="${file.filename}" class="file-video"></video>
+          </a>
+          <span class="file-name" title="${file.filename}">
+            <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
+          </span>
+          <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+        </div>`;
+    } else if (file.filetype === 'application/pdf') {
+      return `
+        <div class="file-item">
+          <a href="${file.filepath}" target="_blank">
+            <div class="file-icon-pdf"></div>
+          </a>
+          <span class="file-name" title="${file.filename}">
+            <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (PDF)</a>
+          </span>
+          <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+        </div>`;
+    } else {
+      return `
+        <div class="file-item">
+          <div class="file-icon other"></div>
+          <span class="file-name" title="${file.filename}">
+            <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (${file.filetype})</a>
+          </span>
+          <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
+        </div>`;
+    }
   }
 
-  if (file.filetype.startsWith('image/')) {
-    return `
-      <div class="file-item">
-        <a href="${file.filepath}" target="_blank">
-          <img src="${file.filepath}" alt="${file.filename}" class="file-thumbnail" title="${file.filename}" />
-        </a>
-        <span class="file-name" title="${file.filename}">
-          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
-        </span>
-        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
-      </div>`;
-  } else if (file.filetype.startsWith('video/')) {
-    return `
-      <div class="file-item">
-        <a href="${file.filepath}" target="_blank">
-          <video controls src="${file.filepath}" title="${file.filename}" class="file-video"></video>
-        </a>
-        <span class="file-name" title="${file.filename}">
-          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)}</a>
-        </span>
-        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
-      </div>`;
-  } else if (file.filetype === 'application/pdf') {
-    return `
-      <div class="file-item">
-        <a href="${file.filepath}" target="_blank">
-          <div class="file-icon-pdf"></div>
-        </a>
-        <span class="file-name" title="${file.filename}">
-          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (PDF)</a>
-        </span>
-        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
-      </div>`;
-  } else {
-    return `
-      <div class="file-item">
-        <div class="file-icon other"></div>
-        <span class="file-name" title="${file.filename}">
-          <a href="${file.filepath}" target="_blank">${truncateFilename(file.filename)} (${file.filetype})</a>
-        </span>
-        <button class="delete-file-button" data-project-index="${projectIndex}" data-file-index="${fileIndex}">🗑️</button>
-      </div>`;
-  }
-}
