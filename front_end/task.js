@@ -204,6 +204,7 @@ document.addEventListener('DOMContentLoaded', async() => {
               Tasks[projectIndex].files.splice(fileIndex, 1);
               saveProjectsToDatabase(); // Cập nhật database
               renderProjectList(); // Cập nhật lại danh sách dự án sau khi xóa file
+              showToast("Thay đổi thành công");
             } catch (error) {
               alert('Failed to delete file');
             }

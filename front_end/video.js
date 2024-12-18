@@ -31,6 +31,7 @@ function addVideoToPlaylist(playlistIndex, video) {
         playlists[playlistIndex].videos.splice(videoIndex, 1); // Xóa video khỏi mảng
         videoItem.remove(); // Xóa phần tử DOM
         update_database();
+        showToast('Xóa video thành công');
     });
 
     // edit tên video
@@ -43,6 +44,7 @@ function addVideoToPlaylist(playlistIndex, video) {
         if (Number.isInteger(playlistIndex) && Number.isInteger(videoIndex)) {
             playlists[playlistIndex].videos[videoIndex].name = this.textContent.trim();
             update_database(); // Cập nhật database
+            showToast('Cập nhật tên video thành công');         
         } else {
             console.error('Invalid playlistIndex or videoIndex');
         }
@@ -107,13 +109,16 @@ function renderPlaylists() {
                     formData.append('folder', 'video');
 
                     try {
+                        showToast('Đang upload video');
                         const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', {
                             method: 'POST',
                             body: formData,
                         });
-
+                        
+                        
                         if (!response.ok) {
-                            throw new Error('Failed to upload file');
+                            showToast('Lỗi upload video');
+
                         }
 
                         const result = await response.json();
@@ -127,8 +132,13 @@ function renderPlaylists() {
                         playlists[index].videos.push(newVideo);
                         addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
                         update_database(); // Cập nhật database
-                    } catch (error) {
-                        console.error('Error uploading file:', error);
+                    } 
+                    catch (error) {
+                       
+                        showToast('Lỗi upload video');
+                    }
+                    finally {
+                        showToast('Upload video thành công');
                     }
                 }
             });

@@ -189,5 +189,5 @@ clearTimeout(timer1);
 clearTimeout(timer2);
 });
 
-showToast("Welcome to Ocean");
+
 
