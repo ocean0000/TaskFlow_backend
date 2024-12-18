@@ -15,12 +15,11 @@ function addVideoToPlaylist(playlistIndex, video) {
     videoItem.innerHTML = `
         <h3 contenteditable="true" data-playlist-index="${playlistIndex}" data-video-index="${playlists[playlistIndex].videos.length - 1}" >${video.name}</h3>
         <button class="remove-video-button" data-playlist-index="${playlistIndex}" data-video-index="${playlists[playlistIndex].videos.length - 1}">X</button>
-        ${
-            video.type === 'mp3'
-                ? `<audio controls>
+        ${video.type === 'mp3'
+            ? `<audio controls>
                        <source src="${video.source}" type="audio/mp3">
                    </audio>`
-                : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow="" encrypted-media" allowfullscreen></iframe>`
+            : `<iframe width="400" height="200" src="${video.source}" frameborder="0" allow="" encrypted-media" allowfullscreen></iframe>`
         }
     `;
 
@@ -82,6 +81,7 @@ function renderPlaylists() {
             const index = this.parentElement.parentElement.getAttribute('data-index');
             playlists[index].name = this.textContent.trim();
             update_database(); // Cập nhật database
+            showToast('Cập nhật tên playlist thành công');
         });
 
         // Xử lý xóa playlist
@@ -90,47 +90,48 @@ function renderPlaylists() {
             playlists.splice(index, 1); // Xóa playlist khỏi mảng
             playlistElement.remove(); // Xóa playlist khỏi DOM
             update_database(); // Cập nhật database
+            showToast('Xóa playlist thành công');
         });
 
         // Xử lý upload video
         const uploadVideoButton = playlistElement.querySelector('.upload-video-button');
         uploadVideoButton.addEventListener('click', function () {
-        const uploadInput = document.createElement('input');
-        uploadInput.type = 'file';
-        uploadInput.accept = '.mp3,.mp4'; // Chấp nhận các tệp video// audio mp3
-        uploadInput.addEventListener('change', async function (event) {
-        const file = event.target.files[0];
-        if (file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            formData.append('folder', 'video');
+            const uploadInput = document.createElement('input');
+            uploadInput.type = 'file';
+            uploadInput.accept = '.mp3,.mp4'; // Chấp nhận các tệp video// audio mp3
+            uploadInput.addEventListener('change', async function (event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    formData.append('folder', 'video');
 
-            try {
-                const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', {
-                    method: 'POST',
-                    body: formData,
-                });
+                    try {
+                        const response = await fetch('https://back-end-ocean.up.railway.app/storage/upload', {
+                            method: 'POST',
+                            body: formData,
+                        });
 
-                if (!response.ok) {
-                    throw new Error('Failed to upload file');
+                        if (!response.ok) {
+                            throw new Error('Failed to upload file');
+                        }
+
+                        const result = await response.json();
+                        const fileType = file.name.endsWith('.mp3') ? 'mp3' : 'link';
+                        const newVideo = {
+                            type: fileType,
+                            name: file.name,
+                            source: result.url, // Sử dụng liên kết từ API
+                        };
+
+                        playlists[index].videos.push(newVideo);
+                        addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
+                        update_database(); // Cập nhật database
+                    } catch (error) {
+                        console.error('Error uploading file:', error);
+                    }
                 }
-
-                const result = await response.json();
-                const fileType = file.name.endsWith('.mp3') ? 'mp3' : 'link';
-                const newVideo = {
-                    type: fileType,
-                    name: file.name,
-                    source: result.url, // Sử dụng liên kết từ API
-                };
-
-                playlists[index].videos.push(newVideo);
-                addVideoToPlaylist(index, newVideo); // Thêm video mới vào DOM
-                update_database(); // Cập nhật database
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        }
-    });
+            });
             uploadInput.click();
         });
 
@@ -175,16 +176,7 @@ function renderPlaylists() {
 }
 
 
-addPlaylistButton.addEventListener('click', function () {
-    const playlistName = playlistNameInput.value.trim();
-    if (playlistName) {
-        playlists.push({ name: playlistName, videos: [] }); // Thêm playlist mới vào mảng
-        playlistNameInput.value = ''; // Xóa nội dung input
-        renderPlaylists(); // Render chỉ playlist mới
-    } else {
-        alert('Please enter a valid playlist name!');
-    }
-});
+
 
 
 // Thêm playlist mới
@@ -194,17 +186,18 @@ addPlaylistButton.addEventListener('click', function () {
         playlists.push({ name: playlistName, videos: [] }); // Thêm playlist mới
         playlistNameInput.value = ''; // Xóa nội dung input
         renderPlaylists(); // Render lại giao diện
-    } else {
-        alert('Please enter a valid playlist name!');
+    } 
+    else {
+        console.log('Please enter playlist name');
+        showToast('Please enter playlist name');
     }
 });
 
 // Render danh sách playlist khi tải trang
-document.addEventListener('DOMContentLoaded', async function()
-{
+document.addEventListener('DOMContentLoaded', async function () {
 
     let username = localStorage.getItem('username');
-    
+
     fetch(`https://back-end-ocean.up.railway.app/video/get`, {
         method: 'POST',
         headers: {
@@ -212,23 +205,22 @@ document.addEventListener('DOMContentLoaded', async function()
         },
         body: JSON.stringify({ username: username }),
     })
-    .then(response => response.json())
-    .then(data => {
-        
-        playlists = data.content.playlists;
-        
-        renderPlaylists();
-    });
+        .then(response => response.json())
+        .then(data => {
 
-   
+            playlists = data.content.playlists;
 
-   
+            renderPlaylists();
+        });
+
+
+
+
 }
 );
 
 
-function update_database()
-{
+function update_database() {
     let username = localStorage.getItem('username');
     fetch(`https://back-end-ocean.up.railway.app/video/update`, {
         method: 'POST',
@@ -237,5 +229,5 @@ function update_database()
         },
         body: JSON.stringify({ username: username, playlists: playlists }),
     })
-    
+
 }

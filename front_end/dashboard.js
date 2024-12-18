@@ -8,7 +8,7 @@ const nextYearBtn = document.querySelector('.next-year');
 
 let date = new Date();
 
-const event_date= [];
+let event_date= [];
 
 document.addEventListener('DOMContentLoaded',async function() {
   await getEvents();
@@ -37,11 +37,14 @@ async function getEvents() {
     const data = await response.json();
 
     if (data.content) {
+      event_date=[];
       data.content.Tasks.forEach(task => {
+        
         const start = new Date(task.startDate);
         const end = new Date(task.endDate);
-        event_date.push({ start, end });
+        event_date.push({ start, end, name: task.name, level: task.level });
       });
+     
     }
   } catch (error) {
     console.error('Error fetching events:', error);
@@ -59,7 +62,7 @@ const renderCalendar = () => {
    // Điều chỉnh để Thứ Hai là ngày đầu tuần
    const firstDay = (new Date(year, month, 1).getDay() + 6) % 7; // Điều chỉnh offset
  
-   const lastDate = new Date(year, month + 1, 0).getDate();
+   const lastDate = new Date(year+2, month + 1, 0).getDate();
  
    currentMonthEl.textContent = `${date.toLocaleString('default', { month: 'long' })} ${year}`;
  

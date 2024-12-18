@@ -2,7 +2,7 @@
 #extension_main {
     width: 95%;
     margin-top: 40px;
-    display: flex;
+    
     justify-content: space-between; /* Chia đều không gian giữa flashcard_box và quiz_box */
     gap: 30px; /* Khoảng cách giữa flashcard_box và quiz_box */
 }

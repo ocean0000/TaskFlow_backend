@@ -7,13 +7,13 @@ const projectList = document.querySelector('.project_list');
 const progressFilter = document.getElementById('progress_filter');
 const levelFilter = document.getElementById('level_filter');
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async() => {
   // Lấy các phần tử HTML
 
-  // Tạo một mảng để lưu trữ các dự án
-  let Tasks = [];
+  
 
-  getProjectsFromDatabase(); // Lấy dữ liệu từ database
+  await getProjectsFromDatabase(); // Lấy dữ liệu từ database
+  
 
   // Hàm định dạng ngày thành YYYY-MM-DD
   function formatDate(date) {
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       Tasks.push(newProject);
       projectNameInput.value = '';
       renderProjectList();
+      
     }
   }
 
@@ -161,12 +162,14 @@ document.addEventListener('DOMContentLoaded', () => {
        projectItem.querySelector('.project-name').addEventListener('input', (e) => {
           project.name = e.target.innerText;
           saveProjectsToDatabase(); // Cập nhật database
+          showToast("Thay đổi thành công");
         });
 
         // Xử lý sự kiện thay đổi level
         projectItem.querySelector('.level-select').addEventListener('change', (e) => {
           project.level = e.target.value;
           saveProjectsToDatabase(); // Cập nhật database
+          showToast("Thay đổi thành công");
         });
 
 
@@ -176,8 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
           project.level = projectItem.querySelector('.level-select').value;
           project.startDate = projectItem.querySelector('.start-date').value;
           project.endDate = projectItem.querySelector('.end-date').value;
-          
           saveProjectsToDatabase(); // Cập nhật database
+          showToast("Thay đổi thành công");
           // renderProjectList();
         });
 
@@ -186,6 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
           Tasks.splice(projectIndex, 1);
           renderProjectList();
           saveProjectsToDatabase(); // Cập nhật database
+          showToast("Thay đổi thành công");
         });
 
         // Xử lý nút Delete File
@@ -249,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (data.content) {
           Tasks = data.content.Tasks;
+          
           renderProjectList();
         }
       })

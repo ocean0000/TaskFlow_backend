@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert(result.message || result);
                 if(result.message === 'Register successfully') {
                 registerSection.style.display = 'none';
+                
                 loginSection.style.display = 'block';}
             })
             .catch(error => {
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     });
 
+    
    document.getElementById('loginForm').addEventListener('submit', async function(event) {
         event.preventDefault();
         const username = document.getElementById('loginUsername').value;
@@ -63,6 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     localStorage.setItem('username', result.user.username);
                     
                     window.location.assign('home.html');
+                   
                 } else {
                     alert(result.message || result);
                 }
@@ -95,6 +98,7 @@ function onSignIn(response)
                 localStorage.setItem('email', result.email);
                 
                 window.location.assign('home.html');
+                
             })
             .catch(error => {
                 console.error('Error:', error);

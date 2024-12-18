@@ -65,7 +65,8 @@ document.getElementById('profileForm').addEventListener('submit', function(event
     .then(result => {
         if(result)
         {
-            alert('Update successfully');
+            showToast('Cập nhật thông tin thành công');
+            
         }
     })
     .catch(error => {
