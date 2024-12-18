@@ -36,6 +36,10 @@ export class Task {
 
   @Prop({ type: [FileSchema], default: [] })
   files: File[];
+
+  @Prop({ default: false })
+  completed: boolean;
+
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
