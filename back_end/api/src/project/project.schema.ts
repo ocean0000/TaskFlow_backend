@@ -38,7 +38,10 @@ export class Task {
   files: File[];
 
   @Prop({ default: false })
-  completed: boolean;
+  completed_start: boolean;
+
+  @Prop({ default: false })
+  completed_end: boolean;
 
 }
 
