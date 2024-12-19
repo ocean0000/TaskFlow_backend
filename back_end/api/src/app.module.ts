@@ -7,10 +7,11 @@ import { VideoModule } from './video/video.module';
 import { StorageModule } from './storage/storage.module';
 
 import { ProjectModule } from './project/project.module';
+import { EmailModule } from './email/email.module';
+require('dotenv').config()
 
 
-
-const uri= `mongodb+srv://ulock:ulock1234@ulock.jcmbi.mongodb.net/?retryWrites=true&w=majority&appName=ulock`
+const uri= process.env.MONGO_URI
 
 @Module({
   imports: [UserModule,
@@ -18,7 +19,9 @@ const uri= `mongodb+srv://ulock:ulock1234@ulock.jcmbi.mongodb.net/?retryWrites=t
     VideoModule,
     StorageModule,
    
-    ProjectModule],
+    ProjectModule,
+   
+    EmailModule],
   
   controllers: [AppController],
   providers: [AppService],
