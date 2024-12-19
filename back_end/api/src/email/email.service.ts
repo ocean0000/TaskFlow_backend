@@ -19,7 +19,7 @@ export class EmailService {
         rejectUnauthorized: false, // Allow self-signed certificates
       },
     });
-    console.log('SMTP_HOST:', this.configService.get<string>('SMTP_HOST'));
+    
   }
 
   async sendMail(to: string, subject: string, text: string, html?: string): Promise<void> {
@@ -33,7 +33,7 @@ export class EmailService {
 
     try {
       await this.transporter.sendMail(mailOptions);
-      console.log(`Email sent to ${to}`);
+      
     } catch (error) {
       console.error('Error sending email:', error);
       throw error;

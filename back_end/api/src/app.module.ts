@@ -16,13 +16,12 @@ import { EmailModule } from './email/email.module';
     }),
 
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: async (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_URI'),
       }),
-      inject: [ConfigService],
     }),
-    
+
     UserModule,
     VideoModule,
     StorageModule,
