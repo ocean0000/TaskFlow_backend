@@ -1,10 +1,10 @@
-import { Body, Controller, UseInterceptors, UploadedFile } from '@nestjs/common';
-import e, { Express } from 'express';
+import { Body, Controller } from '@nestjs/common';
+
 import { Multer } from 'multer';
 import { UserService } from './user.service';
 import { User } from './user.schema';
 import { Post , Get} from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+
 
 @Controller('user')
 export class UserController {
