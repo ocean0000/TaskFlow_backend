@@ -22,15 +22,28 @@ export class EmailController {
   }
 
   @Post('schedule')
-  async scheduleEmail(
+  async scheduleOrUpdateEmail(
     @Body('to') to: string,
     @Body('subject') subject: string,
     @Body('text') text: string,
     @Body('date') date: string,
     @Body('time') time: string,
+    @Body('newDate') newDate?: string,
+    @Body('newTime') newTime?: string,
     @Body('html') html?: string,
   ): Promise<{ message: string }> {
-    const sendDate = new Date(`${date}T${time}:00`);
+    const oldSendDate = new Date(`${date}T${time}:00`);
+    const sendDate = newDate && newTime ? new Date(`${newDate}T${newTime}:00`) : oldSendDate;
+
+    // Remove the old job if updating
+    if (newDate && newTime) {
+      const oldJobKey = `${to}-${oldSendDate}`;
+      if (this.schedulerRegistry.doesExist('cron', oldJobKey)) {
+        this.schedulerRegistry.deleteCronJob(oldJobKey);
+      }
+    }
+
+    // Schedule the new job
     const job = new CronJob(sendDate, async () => {
       await this.emailService.sendMail(to, subject, text, html);
       this.schedulerRegistry.deleteCronJob(`${to}-${sendDate}`);
@@ -39,39 +52,7 @@ export class EmailController {
     this.schedulerRegistry.addCronJob(`${to}-${sendDate}`, job);
     job.start();
 
-    return { message: 'Email scheduled successfully!' };
-  }
-
-  @Post('update-schedule')
-  async updateScheduledEmail(
-    @Body('to') to: string,
-    @Body('subject') subject: string,
-    @Body('text') text: string,
-    @Body('date') date: string,
-    @Body('time') time: string,
-    @Body('newDate') newDate: string,
-    @Body('newTime') newTime: string,
-    @Body('html') html?: string,
-  ): Promise<{ message: string }> {
-    const oldSendDate = new Date(`${date}T${time}:00`);
-    const newSendDate = new Date(`${newDate}T${newTime}:00`);
-
-    // Remove the old job
-    const oldJobKey = `${to}-${oldSendDate}`;
-    if (this.schedulerRegistry.doesExist('cron', oldJobKey)) {
-      this.schedulerRegistry.deleteCronJob(oldJobKey);
-    }
-
-    // Schedule the new job
-    const newJob = new CronJob(newSendDate, async () => {
-      await this.emailService.sendMail(to, subject, text, html);
-      this.schedulerRegistry.deleteCronJob(`${to}-${newSendDate}`);
-    });
-
-    this.schedulerRegistry.addCronJob(`${to}-${newSendDate}`, newJob);
-    newJob.start();
-
-    return { message: 'Email schedule updated successfully!' };
+    return { message: newDate && newTime ? 'Email schedule updated successfully!' : 'Email scheduled successfully!' };
   }
 
  
