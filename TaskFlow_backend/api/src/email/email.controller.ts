@@ -33,7 +33,7 @@ export class EmailController {
     @Body('html') html?: string,
   ): Promise<{ message: string }> {
     const sendDate = new Date(`${date}T${time}:00Z`); // Ensure the date is in UTC
-    const jobKey = `${to}-${sendDate.toISOString()}`;
+    const jobKey = `${to}`;
 
     this.logger.log(`Scheduling email to ${to} at ${sendDate.toISOString()}`);
 
@@ -75,14 +75,10 @@ export class EmailController {
   @Post('cancel')
   async cancelScheduledEmail(
     @Body('to') to: string,
-    @Body('date') date: string,
-    @Body('time') time: string,
+    
   ): Promise<{ message: string }> {
-    const sendDate = new Date(`${date}T${time}:00Z`); // Ensure the date is in UTC
-    const jobKey = `${to}-${sendDate.toISOString()}`;
-
-    this.logger.log(`Cancelling scheduled email to ${to} at ${sendDate.toISOString()}`);
-
+    
+    const jobKey = `${to}`;
     // Check if the job exists
     if (this.schedulerRegistry.doesExist('cron', jobKey)) {
       this.schedulerRegistry.deleteCronJob(jobKey);
