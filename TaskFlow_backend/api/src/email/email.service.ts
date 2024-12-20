@@ -24,7 +24,7 @@ export class EmailService {
 
   async sendMail(to: string, subject: string, text: string, html?: string): Promise<void> {
     const mailOptions = {
-      from: "Task Flow", // Use environment variable
+      from: 'Task Flow <no-reply@taskflow.com>',
       to,
       subject,
       text,
