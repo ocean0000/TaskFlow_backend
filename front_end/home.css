@@ -84,6 +84,7 @@ body.dark_mode #profile_main label {
  }
 .sidebar-links button {
    background: none;
+   border-radius: 5px;
    border: none;
    color: inherit;
    font: inherit;
@@ -123,6 +124,7 @@ body.dark_mode #profile_main label {
 .sidebar-links li button {
   display: flex;
   align-items: center;
+  border-radius: 5px;
   gap: 0 20px;
   color: #add0f8;
   font-weight: 500;
@@ -255,3 +257,26 @@ body.dark_mode #profile_main label {
   }
 }
 
+
+/* extension bar */
+.extension-menu:hover #extension_submenu {
+  display: block;
+  transition: all 0.3s ease-in-out;
+}
+
+#extension_submenu {
+  display: none;
+  margin-left: 20px;
+  list-style-type: none;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.extension-menu:hover #extension_submenu {
+  opacity: 1;
+}
+
+#extension_submenu li {
+  margin: 5px 0;
+}

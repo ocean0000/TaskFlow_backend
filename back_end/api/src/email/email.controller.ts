@@ -1,13 +1,15 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Logger } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { CronJob } from 'cron';
 
 @Controller('email')
 export class EmailController {
+  private readonly logger = new Logger(EmailController.name);
+
   constructor(
     private readonly emailService: EmailService,
-    private schedulerRegistry: SchedulerRegistry,
+    private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
 
   @Post('send')
@@ -28,29 +30,46 @@ export class EmailController {
     @Body('text') text: string,
     @Body('date') date: string,
     @Body('time') time: string,
-    @Body('newDate') newDate?: string,
-    @Body('newTime') newTime?: string,
     @Body('html') html?: string,
   ): Promise<{ message: string }> {
-    const oldSendDate = new Date(`${date}T${time}:00`);
-    const sendDate = newDate && newTime ? new Date(`${newDate}T${newTime}:00`) : oldSendDate;
-    const jobKey = `${to}-${sendDate}`;
+    const sendDate = new Date(`${date}T${time}:00Z`); // Ensure the date is in UTC
+    const jobKey = `${to}-${sendDate.toISOString()}`;
+
+    this.logger.log(`Scheduling email to ${to} at ${sendDate.toISOString()}`);
 
     // Remove the old job if it exists
     if (this.schedulerRegistry.doesExist('cron', jobKey)) {
       this.schedulerRegistry.deleteCronJob(jobKey);
+      this.logger.log(`Deleted existing job with key ${jobKey}`);
+    }
+
+    // Check if the send date is in the past
+    if (sendDate <= new Date()) {
+      this.logger.warn(`WARNING: Date in past. Will never be fired.`);
+      return { message: 'WARNING: Date in past. Will never be fired.' };
     }
 
     // Schedule the new job
     const job = new CronJob(sendDate, async () => {
+      this.logger.log(`Executing job for ${to} at ${sendDate.toISOString()}`);
       await this.emailService.sendMail(to, subject, text, html);
       this.schedulerRegistry.deleteCronJob(jobKey);
+      this.logger.log(`Email sent to ${to} and job ${jobKey} deleted`);
     });
 
     this.schedulerRegistry.addCronJob(jobKey, job);
     job.start();
+    this.logger.log(`Scheduled new job with key ${jobKey}`);
 
-    return { message: newDate && newTime ? 'Email schedule updated successfully!' : 'Email scheduled successfully!' };
+    return { message: 'Email scheduled successfully!' };
+  }
+
+  @Get('scheduled-jobs')
+  listScheduledJobs(): { jobs: string[] } {
+    const jobs = this.schedulerRegistry.getCronJobs();
+    const jobNames = [];
+    jobs.forEach((value, key) => jobNames.push(key));
+    return { jobs: jobNames };
   }
 
  

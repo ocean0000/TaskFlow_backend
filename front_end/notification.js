@@ -1,4 +1,4 @@
-    const notificationList= document.querySelector(".notification_list")
+const notificationList= document.querySelector(".notification_list")
     const notificationDoneBox= document.querySelector(".notification_done_list")
 
 // Hàm định dạng ngày thành dd/mm/yyyy
@@ -167,11 +167,71 @@ function scheduleNotifications() {
 }
 
 document.getElementById("save_notification_settings").addEventListener("click", () => {
-    const notifyDays = document.getElementById("notify_days").value;
+    const notifyDays = parseInt(document.getElementById("notify_days").value, 10);
     const notifyTime = document.getElementById("notify_time").value;
     localStorage.setItem("notify_days", notifyDays);
     localStorage.setItem("notify_time", notifyTime);
     showToast(`Đã lưu cài đặt thông báo: trước ${notifyDays} ngày vào ${notifyTime}`);
+
+    // Schedule or update notifications via backend
+    Tasks.forEach((event) => {
+        if (event.completed_start || event.completed_end) {
+            return;
+        }
+        const eventStart = new Date(event.startDate);
+        const eventEnd = new Date(event.endDate);
+
+         // Calculate notificationTimeStart
+         const notificationTimeStart = new Date(eventStart);
+         notificationTimeStart.setDate(notificationTimeStart.getDate() - notifyDays);
+         const [notifyHour, notifyMinute] = notifyTime.split(':').map(Number);
+         notificationTimeStart.setHours(notifyHour, notifyMinute, 0, 0);
+ 
+         // Calculate notificationTimeEnd
+         const notificationTimeEnd = new Date(eventEnd);
+         notificationTimeEnd.setDate(notificationTimeEnd.getDate() - notifyDays);
+         notificationTimeEnd.setHours(notifyHour, notifyMinute, 0, 0);
+ 
+         const now = new Date();
+         console.log(notifyTime, now);
+ 
+
+        if (notificationTimeStart > now) {
+            fetch('https://back-end-ocean.up.railway.app/email/schedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    date: notificationTimeStart.toISOString().split('T')[0],
+                    time: notifyTime,
+                    to: localStorage.getItem('email'),
+                    subject: `Reminder: ${event.name} is starting soon`,
+                    text: `The event ${event.name} is scheduled to start on ${DateForNotification(eventStart)}.`
+                })
+            }).then(response => response.json())
+              .then(data => console.log(data.message))
+              .catch(error => console.error('Error:', error));
+        }
+
+        if (notificationTimeEnd > now) {
+            fetch('https://back-end-ocean.up.railway.app/email/schedule', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    date: notificationTimeEnd.toISOString().split('T')[0],
+                    time: notifyTime,
+                    to: localStorage.getItem('email'),
+                    subject: `Reminder: ${event.name} is ending soon`,
+                    text: `The event ${event.name} is scheduled to end on ${DateForNotification(eventEnd)}.`
+                })
+            }).then(response => response.json())
+              .then(data => console.log(data.message))
+              .catch(error => console.error('Error:', error));
+        }
+    });
 });
 
 // Gắn sự kiện cho nút Filter
@@ -195,7 +255,7 @@ document.addEventListener("DOMContentLoaded", async() => {
     filterEvents();
 
     document.getElementById("notify_days").value = localStorage.getItem("notify_days") || 1;
-    document.getElementById("notify_time").value = "08:00";
+    document.getElementById("notify_time").value = localStorage.getItem("notify_time") || "08:00";
 
     // Schedule notifications
     setInterval(scheduleNotifications, 60000); // 1 phút

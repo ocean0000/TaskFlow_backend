@@ -6,7 +6,9 @@ const buttonIds = [
     'profile',
     'notification',
     'video',
-    'extension',
+    'flashcard',
+    'quiz',
+    'gpa',
 
 ];
 

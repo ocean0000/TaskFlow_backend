@@ -1,24 +1,28 @@
 /* Container chính */
-#extension_main {
+#flashcard_main, #quiz_main {
     width: 95%;
     margin-top: 40px;
-    
+    margin-left: 85px;
     justify-content: space-between; /* Chia đều không gian giữa flashcard_box và quiz_box */
     gap: 30px; /* Khoảng cách giữa flashcard_box và quiz_box */
+    
 }
+
+
 
 /* Box Flashcard */
 #flashcard_box {
     flex: 1; /* Chiếm 50% chiều rộng */
-    max-width: 500px;
+    max-width:1000px;
     background: linear-gradient(135deg, #ffecd2, #fcb69f);
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap:20px;
     align-items: center;
-    margin-left:140px;
+    margin-left:85px;
   
 }
 

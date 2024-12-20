@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="task.css" />
   <link rel="stylesheet" href="extension.css" />
   <link rel="stylesheet" href="notification.css" />
+  <link rel="stylesheet" href="gpa.css" />
 </head>
 
 <body id="body">
@@ -55,10 +56,25 @@
 
       </h4>
 
-      <li>
-        <button id="extension_button"><span class="material-symbols-outlined"> extension </span>Extensions</a>
+      <li class="extension-menu">
+        <button id="extension_button"><span class="material-symbols-outlined"> extension </span>Extensions
         </button>
+
+        <ul id="extension_submenu">
+          <li>
+            <button id="quiz_button"><span class="material-symbols-outlined"> quiz </span>Quiz</button>
+          </li>
+          <li>
+            <button id="gpa_button"><span class="material-symbols-outlined"> school </span>GPA</button>
+          </li>
+          <li>
+            <button id="flashcard_button"><span class="material-symbols-outlined"> style </span>Flashcard</button>
+          </li>
+        </ul>
+
+
       </li>
+
       <li>
         <button id="video_button"><span class="material-symbols-outlined"> videocam </span>Video</a>
         </button>
@@ -269,7 +285,7 @@
           </div>
 
         </div>
-        
+
         <!-- Container thông báo -->
         <div class="notification_container">
           <div class="notification_list"></div>
@@ -279,33 +295,33 @@
       <div id="notification_done_box" class="notification-box">
         <h3>Mark Done Notifications</h3>
         <!-- Container thông báo đã hoàn thành -->
-        
-          <div class="notification_done_list"></div>
 
-          
-          
+        <div class="notification_done_list"></div>
+
+
+
+      </div>
+
+      <div class="notification_config">
+        <h3>Cài đặt thông báo</h3>
+
+        <div class="config_item">
+          <label for="notify_days">Nhận thông báo trước:</label>
+          <select id="notify_days">
+            <option value="1">1 ngày</option>
+            <option value="2">2 ngày</option>
+            <option value="5">5 ngày</option>
+          </select>
         </div>
 
-        <div class="notification_config">
-          <h3>Cài đặt thông báo</h3>
-          
-          <div class="config_item">
-            <label for="notify_days">Nhận thông báo trước:</label>
-            <select id="notify_days">
-              <option value="1">1 ngày</option>
-              <option value="2">2 ngày</option>
-              <option value="5">5 ngày</option>
-            </select>
-          </div>
-        
-          <div class="config_item">
-            <label for="notify_time">Giờ thông báo:</label>
-            <input type="time" id="notify_time" value="08:00">
-          </div>
-        
-          <button id="save_notification_settings">Lưu cài đặt</button>
+        <div class="config_item">
+          <label for="notify_time">Giờ thông báo:</label>
+          <input type="time" id="notify_time" value="08:00">
         </div>
-        
+
+        <button id="save_notification_settings">Lưu cài đặt</button>
+      </div>
+
 
     </div>
 
@@ -313,7 +329,8 @@
 
 
     <!-- extension -->
-    <div id="extension_main" style="display: none;">
+     <!-- flashcard -->
+    <div id="flashcard_main" style="display: none;">
 
       <div id="flashcard_box">
         <!-- Tiêu đề chính -->
@@ -351,8 +368,13 @@
             <button id="cancel-button">Hủy</button>
           </div>
         </div>
+        
       </div>
 
+    </div>
+
+    <!-- quiz -->
+    <div id="quiz_main" style="display: none;">
       <!-- Phần Quiz -->
       <div class="quiz-display">
         <h1 id="question-text">Câu hỏi sẽ hiển thị ở đây</h1>
@@ -394,6 +416,47 @@
 
     </div>
 
+    <!-- GPA -->
+    <div id="gpa_main" style="display: none;">
+            
+      <div class="container">
+        <h1>Công cụ tính điểm trung bình môn học</h1>
+        <form id="gradeForm">
+          <div class="form-row">
+            <input type="text" id="subjectName" placeholder="Tên môn học" required>
+            <input type="number" id="credit" placeholder="Số tín chỉ" min="1" required>
+            <input type="number" id="componentScore" placeholder="Điểm thành phần (10%)" min="0" max="10" step="0.1" required>
+            <input type="number" id="midtermScore" placeholder="Điểm giữa kỳ (30%)" min="0" max="10" step="0.1" required>
+            <input type="number" id="finalScore" placeholder="Điểm cuối kỳ (60%)" min="0" max="10" step="0.1" required>
+          </div>
+          <button type="button" id="addSubject">Thêm vào danh sách</button>
+        </form>
+        <h2>Danh sách môn học</h2>
+        <div class="button-container">
+          <button id="resetTable">Làm mới bảng</button>
+        </div>
+        <table id="subjectTable">
+          <thead>
+            <tr>
+              <th>Tên môn</th>
+              <th>Tín chỉ</th>
+              <th>Điểm hệ 10</th>
+              <th>Điểm chữ</th>
+              <th>Điểm hệ 4</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <div class="results">
+          <h2 id="gpaResult">GPA: </h2>
+          <h3 id="improveCourses">Số môn học cần cải thiện: 0</h3>
+          <ul id="improveList"></ul>
+          <h3 id="retakeCourses">Số môn học cần học lại: 0</h3>
+          <ul id="retakeList"></ul>
+        </div>
+      </div>
+      </div>
 
 
 
@@ -514,5 +577,6 @@
 <script src="task.js"></script>
 <script src="extension.js"></script>
 <script src="notification.js"></script>
+<script src="gpa.js"></script>
 
 </html>

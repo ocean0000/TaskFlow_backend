@@ -120,9 +120,9 @@ document.addEventListener('DOMContentLoaded', async() => {
           </div>
           <div class="project-dates">
             <label for="start-date-${projectIndex}">Start Date:</label>
-            <input type="datetime"   id="start-date-${projectIndex}" class="start-date" value="${project.startDate || ''}">
+            <input type="date"   id="start-date-${projectIndex}" class="start-date" value="${project.startDate || ''}">
             <label for="end-date-${projectIndex}">End Date:</label>
-            <input type="datetime"   id="end-date-${projectIndex}" class="end-date" value="${project.endDate || ''}">
+            <input type="date"   id="end-date-${projectIndex}" class="end-date" value="${project.endDate || ''}">
           </div>
           <div class="project-note">
             <label for="note-${projectIndex}">Note:</label>
