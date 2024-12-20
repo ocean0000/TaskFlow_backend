@@ -81,15 +81,14 @@ h2 {
     background-color: #0056b3;
 }
 
-<<<<<<< HEAD
 body{
     background-image:url("assests/bg.jpg");
     background-size: cover;
     background-position: center center;
 }
 
-=======
-
-
->>>>>>> 8e841d3119bac4141724b63de8efde55a1be8ff7
-
+.g_id_signin-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px; /* Optional: Add some space above the button */
+}
