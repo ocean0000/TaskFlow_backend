@@ -72,5 +72,27 @@ export class EmailController {
     return { jobs: jobNames };
   }
 
+  @Post('cancel')
+  async cancelScheduledEmail(
+    @Body('to') to: string,
+    @Body('date') date: string,
+    @Body('time') time: string,
+  ): Promise<{ message: string }> {
+    const sendDate = new Date(`${date}T${time}:00Z`); // Ensure the date is in UTC
+    const jobKey = `${to}-${sendDate.toISOString()}`;
+
+    this.logger.log(`Cancelling scheduled email to ${to} at ${sendDate.toISOString()}`);
+
+    // Check if the job exists
+    if (this.schedulerRegistry.doesExist('cron', jobKey)) {
+      this.schedulerRegistry.deleteCronJob(jobKey);
+      this.logger.log(`Deleted job with key ${jobKey}`);
+      return { message: 'Scheduled email cancelled successfully' };
+    } else {
+      this.logger.warn(`No job found with key ${jobKey}`);
+      return { message: 'No scheduled email found to cancel' };
+    }
+  }
+
  
 }
