@@ -32,7 +32,7 @@ export class EmailController {
     @Body('time') time: string,
     @Body('html') html?: string,
   ): Promise<{ message: string }> {
-    const sendDate = new Date(`${date}T${time}:00Z`); // Ensure the date is in UTC
+    const sendDate = new Date(`${date}T${time}:00`); // Ensure the date is in UTC
     const jobKey = `${text}`;
 
     this.logger.log(`Scheduling email to ${to} at ${sendDate.toISOString()}`);
@@ -64,12 +64,16 @@ export class EmailController {
     return { message: 'Email scheduled successfully!' };
   }
 
+
   @Get('scheduled-jobs')
-  listScheduledJobs(): { jobs: string[] } {
+  listScheduledJobs(): { jobs: { name: string, nextRun: string }[] } {
     const jobs = this.schedulerRegistry.getCronJobs();
-    const jobNames = [];
-    jobs.forEach((value, key) => jobNames.push(key));
-    return { jobs: jobNames };
+    const jobDetails = [];
+    jobs.forEach((value, key) => {
+      const nextRun = value.nextDates().toString(); // Get the next run time
+      jobDetails.push({ name: key, nextRun });
+    });
+    return { jobs: jobDetails };
   }
 
   @Post('cancel')
