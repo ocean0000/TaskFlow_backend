@@ -33,7 +33,7 @@ export class EmailController {
     @Body('html') html?: string,
   ): Promise<{ message: string }> {
     const sendDate = new Date(`${date}T${time}:00Z`); 
-    sendDate.setHours(sendDate.getHours() +7); // Adjust for timezone
+    sendDate.setHours(sendDate.getHours() -7); // Adjust for timezone
     const jobKey = `${text}`;
 
     this.logger.log(`Scheduling email to ${to} at ${sendDate.toISOString()}`);
