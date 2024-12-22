@@ -32,7 +32,7 @@ export class ProjectService {
           project,
           { new: true }
           );
-          return { message: 'Project updated successfully', project: updatedProject };
+          return { message: 'Project updated successfully', project: project };
     }
 
    async deleteProject(project: Project) {   
