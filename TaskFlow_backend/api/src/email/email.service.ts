@@ -28,7 +28,7 @@ export class EmailService {
       to,
       subject,
       text,
-      html: html || "<a href='https://tasksflow.up.railway.app/'>Click here to view the email in HTML</a>",
+      html: html || "<a href='https://tasksflow.up.railway.app/'>Click here to view your tasks </a>",
     };
 
     try {
